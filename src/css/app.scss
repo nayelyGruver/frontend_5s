@@ -1,1 +1,6 @@
 // app global css in SCSS form
+//TODO: DIVIDIR SCSS por archivos
+@import './mixins/mixins';
+@import './global/global';
+@import './layout/login';
+@import './layout/dashboard';

@@ -55,7 +55,7 @@
 </template>
 <script>
 import { useUsuarioStore } from '../stores/usuarios'
-import { api } from 'src/boot/axios'
+import { apiUsuarios } from 'src/boot/axiosUsuarios'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 // import { storeToRefs } from 'pinia'
@@ -98,7 +98,7 @@ export default {
           return
         }
 
-        const { data } = await api.post('/usuarios/login', { usuario: usuario.value, contrasena: contrasena.value })
+        const { data } = await apiUsuarios.post('/usuarios/login', { usuario: usuario.value, contrasena: contrasena.value })
         localStorage.setItem('token', data.token)
         autenticarUsuario()
         router.push('/principal')

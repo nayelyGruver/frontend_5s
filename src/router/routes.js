@@ -2,9 +2,17 @@
 const routes = [
   {
     path: '/',
+    name: 'login',
+    component: () => import('pages/LoginPage.vue'),
+  },
+  {
+    path: '/principal',
+    name: 'principal',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') }
+      { path: '', icono:'dashboard', label: 'Inicio', name: 'dashboard',component: () => import('layouts/MainLayout.vue') },
+      { path: 'reportes', icono:'manage_accounts', label: 'Reportes 5s', name: 'reportes',component: () => import('src/modules/ReportesModule.vue') },
+      
     ]
   },
 

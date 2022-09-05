@@ -1,0 +1,42 @@
+/* login */
+.contenedor-login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    h1 {
+        color: #fff;
+        
+    }
+}
+.formulario-login{
+    width: 95%;
+    @include adaptar(768px){
+        width: 40%;
+
+    }
+}
+.contenedor-logo-gruver{
+    display: flex;
+    justify-content: center;
+}
+.imagen-gruver {
+    width: 80%;
+
+}
+
+.footer {
+    padding: 2rem;
+    p{
+        color: #fff;
+        text-align: center;
+        font-size: 1.8rem;
+    }
+    span {
+        font-weight: bold;
+    }
+}
+.btn-login{
+    display: flex;
+    flex-direction: row-reverse;
+}

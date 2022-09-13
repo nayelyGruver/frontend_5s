@@ -51,7 +51,7 @@ export default {
     const { evaluacion } = storeToRefs(useEvaluacion);
 
     const useReporte = useReporteStore();
-    const { obtenerReporte } = useReporte;
+    const { obtenerReportes } = useReporte;
     const { reportes } = storeToRefs(useReporte);
 
     const fecha = ref(0);
@@ -64,7 +64,9 @@ export default {
     });
     const abrir = () => {
       abrirModal.value = true;
-      obtenerReporte(evaluacion.value[0].id_reporte);
+      obtenerReportes();
+      reportes.value = reportes.value.find.id_reporte;
+      // obtenerReporte(evaluacion.value[0].id_reporte);
       calificacion.value = reportes.value[0].calificacion;
       fecha.value = reportes.value[0].fecha;
       empresa.value = reportes.value[0].id_empresa;

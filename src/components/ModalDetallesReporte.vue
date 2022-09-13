@@ -2,37 +2,30 @@
   <div>
     <q-dialog v-model="abrirModal" full-width>
       <q-page-container class="bg-white text-dark">
-        <div class="q-pa-md">
+        <div class="q-px-lg">
           <h2 class="text-dark">Detalles Reporte de Evaluación 5'S</h2>
+          <p>Calificación: {{ calificacion }}</p>
         </div>
-
         <q-separator color="primary" class="" inset />
         <div class="q-pa-md">
           <q-table
             v-for="({ nombre }, index) in lista_s"
             v-bind:key="index"
             :columns="columns"
-            :rows="evaluacion"
+            :rows="filtrarEvaluacion(nombre)"
             hide-bottom
             :rows-per-page-options="[0]"
           >
-            <template v-slot:header="">
-              <q-tr>
+            <template v-slot:header>
+              <q-tr class="table-header">
                 <q-th colspan="2">{{ index + 1 }}S.{{ nombre }} </q-th>
                 <q-th colspan="1">Puntos</q-th>
                 <q-th colspan="1">Puntos Obtenidos</q-th>
                 <q-th colspan="1">Observaciones</q-th>
               </q-tr>
             </template>
-
-            <template v-slot-cell-descripcion="props">
-              <td>
-                {{ props.row }}
-              </td>
-            </template>
           </q-table>
         </div>
-
         <q-card>
           <q-card-actions align="right">
             <q-btn flat label="OK" color="primary" v-close-popup />
@@ -46,11 +39,8 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useEvaluacionStore } from "../stores/evaluacion";
+import { useReporteStore } from "../stores/reportes";
 import { storeToRefs } from "pinia";
-
-//import myJson from "./data.json";
-
-//console.log(JSON.parse(myJson));
 
 export default {
   setup() {
@@ -59,25 +49,36 @@ export default {
     const useEvaluacion = useEvaluacionStore();
     const { obtenerEvaluacion } = useEvaluacion;
     const { evaluacion } = storeToRefs(useEvaluacion);
-    const nombre5s = ref("");
 
-    // const arrayClasificar = JSON.parse(json_data);
-    // console.log(arrayClasificar);
+    const useReporte = useReporteStore();
+    const { obtenerReporte } = useReporte;
+    const { reportes } = storeToRefs(useReporte);
 
-    onMounted(() => {});
+    const fecha = ref(0);
+    const empresa = ref(0);
+    const calificacion = ref(0);
+    const departamentos = ref([]);
 
-    const abrir = (insertar) => {
+    onMounted(() => {
+      obtenerEvaluacion(3, 21);
+    });
+    const abrir = () => {
       abrirModal.value = true;
-      obtenerEvaluacion(3, 21, nombre5s.value);
-      console.log(nombre5s.value);
-      // obtenerEvaluacion(3, 21, )
+      obtenerReporte(evaluacion.value[0].id_reporte);
+      calificacion.value = reportes.value[0].calificacion;
+      fecha.value = reportes.value[0].fecha;
+      empresa.value = reportes.value[0].id_empresa;
+      departamentos.value = [reportes.value.departamentos];
     };
+
+    const filtrarEvaluacion = (nombre) =>
+      evaluacion.value.filter((criterio) => criterio.nombre_s === nombre);
 
     const lista_s = [
       { nombre: "clasificar" },
       { nombre: "ordenar" },
       { nombre: "limpiar" },
-      { nombre: "estadarizar" },
+      { nombre: "estandarizar" },
       { nombre: "mantener" },
     ];
 
@@ -88,15 +89,16 @@ export default {
         align: "center",
         field: "criterio",
         sortable: false,
-        style: "white-space: unset !important",
+        style:
+          "text-transform: uppercase; white-space: unset !important; width: 10%",
       },
       {
         name: "descripcion",
         label: "Descripción",
         align: "left",
         sortable: true,
-        // field: "descripcion",
-        style: "white-space: unset !important",
+        field: "descripcion",
+        style: "white-space: unset !important; width: 55%",
       },
       {
         name: "puntos",
@@ -104,7 +106,7 @@ export default {
         align: "center",
         field: "puntos",
         sortable: false,
-        style: "white-space: unset !important",
+        style: "width: 5%",
       },
       {
         name: "puntos_obtenidos",
@@ -112,7 +114,7 @@ export default {
         align: "center",
         field: "puntos_obtenidos",
         sortable: false,
-        style: "white-space: unset !important",
+        style: "width: 5%",
       },
       {
         name: "observaciones",
@@ -120,50 +122,19 @@ export default {
         align: "left",
         field: "observaciones",
         sortable: false,
-        style: "white-space: unset !important",
+        style: "white-space: unset !important; width: 25%",
       },
     ];
 
-    const clasificar = [
-      {
-        criterio: "area de trabajo",
-        descripcion:
-          "Los elementos/objetos que se encuentran sobre mi escritorio, mesa de trabajo y en\r\nel area de trabajo, son los que necesito para trabajar. (Se debe descartar los\r\nelementos que no se utilicen, documentos, equipo obsoleto o dañado, etc.)",
-        puntos: 5,
-        puntos_obtenidos: 5,
-        observaciones: "OK",
-      },
-      {
-        criterio: "cajones",
-        descripcion:
-          "En mis cajones solo hay objetos, materiales o elementos que necesito para realizar\r\nmi trabajo.",
-        puntos: 5,
-        puntos_obtenidos: 5,
-        observaciones: "OK",
-      },
-      {
-        criterio: "objetos personales",
-        descripcion:
-          "Mis objetos personales (bolsos, sueteres, etc) están guardados en un área\r\ndeterminada o cajon, donde no obstruya o quite espacio a mi área de trabajo.",
-        puntos: 5,
-        puntos_obtenidos: 5,
-        observaciones: "OK",
-      },
-    ];
-    const regresarCriterio = (nombre) => {
-      nombre5s.value = nombre;
-      return nombre;
-    };
     return {
       abrir,
       abrirModal,
-      nombre5s,
       obtenerEvaluacion,
       evaluacion,
       columns,
       lista_s,
-      regresarCriterio,
-      clasificar,
+      filtrarEvaluacion,
+      calificacion,
     };
   },
 };

@@ -1,27 +1,26 @@
 import { api } from 'src/boot/axios'
 
-import { defineStore }   from 'pinia'
+import { defineStore, storeToRefs }   from 'pinia'
 
 import { ref }  from 'vue'
+
+import { useDepartamentosStore } from "../stores/departamentos"
+
+const useDepartamento = useDepartamentosStore();
+const { obtenerDepartamento } = useDepartamento;
+const { departamentos } = storeToRefs(useDepartamento);
 
 export const useReporteStore = defineStore("reportes", () => {
     //propiedades reactivas - se estrae con useToRef
     const reportes  = ref ([])
     //funciones o actions 
-    const obtenerReportes = async (mes, anio) => {
+    const obtenerReportes = async() => {
         try{
-            const { data } = await api.get(`/reportes/${mes}/${anio}`)
-            reportes.value = [... data]
+            const { data } = await api.get(`/reportes`)
             console.log(data)
-        }catch(error){
-            console.log(error)
-        }
-    }
-
-    const obtenerReporte = async (id) => {
-        console.log(id)
-        try{
-            const { data } = await api.get(`/reporte/${id}`)
+            data.forEach(row => {
+                console.log("ROW", row)
+            });
             reportes.value = [... data]
             console.log(data)
         }catch(error){
@@ -30,7 +29,6 @@ export const useReporteStore = defineStore("reportes", () => {
     }
     return {
         obtenerReportes,
-        obtenerReporte,
         reportes
     }
 })

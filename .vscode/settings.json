@@ -11,5 +11,11 @@
     "javascriptreact",
     "typescript",
     "vue"
-  ]
+  ],
+  "[vue]": {
+    "editor.defaultFormatter": "octref.vetur"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "ms-vsliveshare.vsliveshare"
+  }
 }

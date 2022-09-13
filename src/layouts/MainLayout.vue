@@ -1,13 +1,12 @@
 <template>
   <q-layout view="hHh LpR fFf">
-
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
           <q-avatar class="logo-inicio">
-            <img src="../img/logog.png">
+            <img src="../img/logog.png" />
           </q-avatar>
           Evaluaciones 5s
         </q-toolbar-title>
@@ -16,76 +15,74 @@
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <!-- drawer content -->
-       <div class="row justify-center contenedor-menu">
-            <q-img src="../img/banner.jpg" id="target-img-1" style="height: 100px">
-              <div class="absolute-bottom-right" style="border-top-left-radius: 5px">
-                <q-avatar class="avatar">
-                  <!-- <img src="../img/yo.png" /> -->
-                    {{ inicialesUsuario( usuarioAutenticado?.nombre ) }}
-                    
-                </q-avatar>
-                 {{ usuarioAutenticado?.nombre }} <span style="font-weight:bold;"></span> 
-                </div>
-            </q-img>
+      <div class="row justify-center contenedor-menu">
+        <q-img src="../img/banner.jpg" id="target-img-1" style="height: 100px">
+          <div
+            class="absolute-bottom-right"
+            style="border-top-left-radius: 5px"
+          >
+            <q-avatar class="avatar">
+              <!-- <img src="../img/yo.png" /> -->
+              <!-- {{ inicialesUsuario(usuarioAutenticado?.nombre) }} -->
+            </q-avatar>
+            <!-- {{ usuarioAutenticado?.nombre }} <span style="font-weight:bold;"></span>  -->
           </div>
-          <NavBar></NavBar>
+        </q-img>
+      </div>
+      <NavBar></NavBar>
     </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue'
-import NavBar from '../components/NavBar.vue'
-import { useUsuarioStore } from '../stores/usuarios'
-import { storeToRefs } from 'pinia'
+import { ref, onMounted, computed } from "vue";
+import NavBar from "../components/NavBar.vue";
+import { useUsuarioStore } from "../stores/usuarios";
+import { storeToRefs } from "pinia";
 
 export default {
-  components:{
-    NavBar
+  components: {
+    NavBar,
   },
-  setup () {
-    const useUsuario = useUsuarioStore()
-    const { usuarioAutenticado } = storeToRefs( useUsuario )
-    const { obtenerUsuarios } = useUsuario
-    const leftDrawerOpen = ref(false)
+  setup() {
+    const useUsuario = useUsuarioStore();
+    const { usuarioAutenticado } = storeToRefs(useUsuario);
+    const { obtenerUsuarios } = useUsuario;
+    const leftDrawerOpen = ref(false);
 
-     onMounted(()=> {
-        obtenerUsuarios()
-      })
-    
-    const inicialesUsuario =  ( nombre ) => computed(()=>{
-      const nombreCompleto = nombre.split(" ")
-      return nombreCompleto[0].charAt(0) + nombreCompleto[1].charAt(0)
-    })
-  
+    onMounted(() => {
+      obtenerUsuarios();
+    });
+
+    const inicialesUsuario = (nombre) =>
+      computed(() => {
+        const nombreCompleto = nombre.split(" ");
+        return nombreCompleto[0].charAt(0) + nombreCompleto[1].charAt(0);
+      });
+
     return {
       leftDrawerOpen,
       usuarioAutenticado,
       inicialesUsuario,
-      toggleLeftDrawer () { 
-        leftDrawerOpen.value = !leftDrawerOpen.value
+      toggleLeftDrawer() {
+        leftDrawerOpen.value = !leftDrawerOpen.value;
       },
-     
-  
-    }
-    
+    };
   },
-  
-}
+};
 </script>
 <style scoped>
-  .logo-inicio {
-    background-color: white;
-  }
-  .logo-inicio img {
-    padding: .3rem;
-  }
-  .contenedor-menu{
-    margin-bottom: 1rem;
-  }
+.logo-inicio {
+  background-color: white;
+}
+.logo-inicio img {
+  padding: 0.3rem;
+}
+.contenedor-menu {
+  margin-bottom: 1rem;
+}
 </style>

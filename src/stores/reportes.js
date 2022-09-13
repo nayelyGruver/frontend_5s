@@ -1,12 +1,12 @@
 import { api } from 'src/boot/axios'
+
 import { defineStore }   from 'pinia'
 
 import { ref }  from 'vue'
 
-export const useReporteStore = defineStore("", () => {
+export const useReporteStore = defineStore("reportes", () => {
     //propiedades reactivas - se estrae con useToRef
     const reportes  = ref ([])
-
     //funciones o actions 
     const obtenerReportes = async (mes, anio) => {
         try{
@@ -16,7 +16,6 @@ export const useReporteStore = defineStore("", () => {
         }catch(error){
             console.log(error)
         }
-
     }
     return {
         obtenerReportes,

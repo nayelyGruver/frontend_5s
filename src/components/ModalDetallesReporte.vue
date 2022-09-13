@@ -18,13 +18,17 @@
           >
             <template v-slot:header="">
               <q-tr>
-                <q-th colspan="2"
-                  >{{ index + 1 }}S.{{ regresarCriterio(nombre) }}
-                </q-th>
+                <q-th colspan="2">{{ index + 1 }}S.{{ nombre }} </q-th>
                 <q-th colspan="1">Puntos</q-th>
                 <q-th colspan="1">Puntos Obtenidos</q-th>
                 <q-th colspan="1">Observaciones</q-th>
               </q-tr>
+            </template>
+
+            <template v-slot-cell-descripcion="props">
+              <td>
+                {{ props.row }}
+              </td>
             </template>
           </q-table>
         </div>
@@ -91,7 +95,7 @@ export default {
         label: "Descripción",
         align: "left",
         sortable: true,
-        field: "descripcion",
+        // field: "descripcion",
         style: "white-space: unset !important",
       },
       {

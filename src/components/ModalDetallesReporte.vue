@@ -12,20 +12,20 @@
             v-for="({ nombre }, index) in lista_s"
             v-bind:key="index"
             :columns="columns"
+            :rows="evaluacion"
             hide-bottom
             :rows-per-page-options="[0]"
           >
             <template v-slot:header="">
               <q-tr>
-                <q-th colspan="2">{{ index + 1 }}S.{{ nombre }} </q-th>
+                <q-th colspan="2"
+                  >{{ index + 1 }}S.{{ regresarCriterio(nombre) }}
+                </q-th>
                 <q-th colspan="1">Puntos</q-th>
                 <q-th colspan="1">Puntos Obtenidos</q-th>
                 <q-th colspan="1">Observaciones</q-th>
               </q-tr>
             </template>
-            <div :v-for="row in evaluacion">
-              <q-tr> {{ row }} </q-tr>
-            </div>
           </q-table>
         </div>
 
@@ -55,13 +55,19 @@ export default {
     const useEvaluacion = useEvaluacionStore();
     const { obtenerEvaluacion } = useEvaluacion;
     const { evaluacion } = storeToRefs(useEvaluacion);
+    const nombre5s = ref("");
 
     // const arrayClasificar = JSON.parse(json_data);
     // console.log(arrayClasificar);
 
-    onMounted(() => {
-      obtenerEvaluacion(3, 21);
-    });
+    onMounted(() => {});
+
+    const abrir = (insertar) => {
+      abrirModal.value = true;
+      obtenerEvaluacion(3, 21, nombre5s.value);
+      console.log(nombre5s.value);
+      // obtenerEvaluacion(3, 21, )
+    };
 
     const lista_s = [
       { nombre: "clasificar" },
@@ -140,13 +146,19 @@ export default {
         observaciones: "OK",
       },
     ];
-
+    const regresarCriterio = (nombre) => {
+      nombre5s.value = nombre;
+      return nombre;
+    };
     return {
+      abrir,
       abrirModal,
+      nombre5s,
       obtenerEvaluacion,
       evaluacion,
       columns,
       lista_s,
+      regresarCriterio,
       clasificar,
     };
   },

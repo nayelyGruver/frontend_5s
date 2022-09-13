@@ -98,7 +98,8 @@ export default {
 
     const verDetallesReportes = (id) => {
       console.log(id);
-      abrirModalRef.value.abrirModal = true;
+      abrirModalRef.value.abrir(true);
+      // abrirModalRef.value.abrirModal = true;
     };
 
     //  HOOK ciclo de vida del componente

@@ -3,6 +3,15 @@
     <q-page-container>
       <div class="q-pa-md">
         <h2>Reportes de Evaluación 5'S</h2>
+        <div>
+          <q-btn
+            icon-right="note_add"
+            borderless
+            color="primary"
+            label="Realizar nueva evaluación"
+            @click="crearNuevoReporte"
+          />
+        </div>
       </div>
       <q-separator color="primary" class="q-my-md" inset />
       <div class="q-pa-md">
@@ -70,6 +79,7 @@
           </q-dialog>
         </template>
         <ModalDetallesReporte ref="abrirModalRef"></ModalDetallesReporte>
+        <ModalNuevoReporte ref="modalNuevoReporte"> </ModalNuevoReporte>
       </div>
     </q-page-container>
   </q-layout>
@@ -80,6 +90,7 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { formatearFecha } from "../helpers/formatearFecha";
 import ModalDetallesReporte from "../components/ModalDetallesReporte.vue";
+import ModalNuevoReporte from "../components/ModalNuevoReporte.vue";
 
 import { useReporteStore } from "../stores/reportes";
 import { useDepartamentosStore } from "../stores/departamentos";
@@ -88,6 +99,7 @@ import { useEvaluacionStore } from "../stores/evaluacion";
 export default {
   components: {
     ModalDetallesReporte,
+    ModalNuevoReporte,
   },
   setup() {
     const useReporte = useReporteStore();
@@ -102,6 +114,7 @@ export default {
     const { departamentos } = storeToRefs(useDepartamento);
 
     const abrirModalRef = ref(null);
+    const modalNuevoReporte = ref(null);
     const confirm = ref(false);
 
     const columns = [
@@ -161,6 +174,12 @@ export default {
       // abrirModalRef.value.abrirModal = true;
     };
 
+    const crearNuevoReporte = () => {
+      console.log("nuevo reporte");
+      modalNuevoReporte.value.abrir(true);
+      // modalEmpresas.value.abrir(true);
+    };
+
     //  HOOK ciclo de vida del componente
     onMounted(() => {
       obtenerReportes();
@@ -183,6 +202,8 @@ export default {
       confirmarEliminarReporte,
       confirm,
       eliminarReporte,
+      modalNuevoReporte,
+      crearNuevoReporte,
     };
   },
 };

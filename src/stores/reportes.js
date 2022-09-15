@@ -29,11 +29,25 @@ export const useReporteStore = defineStore("reportes", () => {
         }
         
     }
+    const insertarReporte = async (reporteObj) => {
+        console.log(reporteObj)
+        try{
+            const respuesta = await api.post('/reporte', reporteObj)
+            console.log("se inserto el  reporte ", reporteObj)
+            reportes.value = [ reporteObj, ... reportes.value ]
+            console.log(respuesta)
+            // obtenerReportes()
+        } catch(error){
+            console.log(error)
+        }
+    }
+
     return {
         obtenerReportes,
         obtenerReporteId,
         eliminarReporte,
         reportes,
-        reporte
+        reporte, 
+        insertarReporte
     }
 })

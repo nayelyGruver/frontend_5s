@@ -41,7 +41,7 @@ export const useUsuarioStore = defineStore("usuarios", () => {
 
         } catch ( error ) {
 
-          console.log(error.response.msg)
+          // console.log(error.response.msg)
           
         } finally {
             cargando.value = false

@@ -4,17 +4,17 @@ import { ref } from 'vue'
 
 export const useDepartamentosStore = defineStore("departamentos", () => {
     const departamentos = ref ([])
-    const obtenerDepartamento = async (idEmpresa) => {
+    const obtenerDepartamentos = async (idEmpresa="") => {
         try {
             const { data } = await api.get(`/departamentos/${idEmpresa}`)
             departamentos.value = [...data]
-            console.log(data)
+            console.log("DEPPARTAMENTOS DESDE STORE", departamentos.value)
         } catch(error){
             console.log(error)
         }
     }
     return {
-        obtenerDepartamento,
+        obtenerDepartamentos,
         departamentos, 
     }
 })

@@ -10,7 +10,7 @@ const routes = [
     name: 'principal',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', icono:'dashboard', label: 'Inicio', name: 'dashboard',component: () => import('layouts/MainLayout.vue') },
+      { path: '', icono:'dashboard', label: 'Inicio', name: 'dashboard',component: () => import('src/modules/dashboard/DashBoard.vue') },
       { path: 'reportes', icono:'manage_accounts', label: 'Reportes 5s', name: 'reportes',component: () => import('src/modules/ReportesModule.vue') },
       
     ]

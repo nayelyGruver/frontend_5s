@@ -3,8 +3,28 @@
     <q-dialog v-model="abrirModal" full-width>
       <q-page-container class="bg-white text-dark">
         <div class="q-px-lg">
-          <h2 class="text-dark">Detalles Reporte de Evaluación 5'S</h2>
-          <p>Calificación: {{ calificacion }}</p>
+          <div class="row items-baseline justify-between">
+            <h2 class="text-dark">
+              Detalles Reporte de Evaluación 5'S - {{ reporte.empresa }} -
+              {{ formatearFecha(reporte.fecha) }}
+            </h2>
+            <p>Calificación: {{ reporte.calificacion }}/100</p>
+          </div>
+          <div class="justify-end">
+            <q-select
+              filled
+              v-model="model"
+              :options="departamentos"
+              option-label="nombre"
+              label="Departamento"
+            >
+              <template v-slot:selected>
+                <q-chip color="white" text-color="primary" class="q-ma-none">
+                  {{ model.nombre }}
+                </q-chip>
+              </template>
+            </q-select>
+          </div>
         </div>
         <q-separator color="primary" class="" inset />
         <div class="q-pa-md">
@@ -38,9 +58,12 @@
 
 <script>
 import { ref, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { formatearFecha } from "../helpers/formatearFecha";
+
 import { useEvaluacionStore } from "../stores/evaluacion";
 import { useReporteStore } from "../stores/reportes";
-import { storeToRefs } from "pinia";
+import { useDepartamentosStore } from "../stores/departamentos";
 
 export default {
   setup() {
@@ -51,26 +74,24 @@ export default {
     const { evaluacion } = storeToRefs(useEvaluacion);
 
     const useReporte = useReporteStore();
-    const { obtenerReportes } = useReporte;
-    const { reportes } = storeToRefs(useReporte);
+    const { reporte } = storeToRefs(useReporte);
 
-    const fecha = ref(0);
-    const empresa = ref(0);
-    const calificacion = ref(0);
-    const departamentos = ref([]);
+    const useDepartamento = useDepartamentosStore();
+    const { departamentos } = storeToRefs(useDepartamento);
 
-    onMounted(() => {
-      obtenerEvaluacion(3, 21);
-    });
+    const model = ref([]);
+
+    onMounted(() => {});
+
     const abrir = () => {
+      //TODO:
+      obtenerEvaluacion(
+        reporte.value.id_reporte,
+        //TODO:
+        departamentos.value[0].id_departamento //<------------NO CARGA LA PRIMERA VEZ
+      );
+      // model.value = departamentos.value[0];
       abrirModal.value = true;
-      obtenerReportes();
-      reportes.value = reportes.value.find.id_reporte;
-      // obtenerReporte(evaluacion.value[0].id_reporte);
-      calificacion.value = reportes.value[0].calificacion;
-      fecha.value = reportes.value[0].fecha;
-      empresa.value = reportes.value[0].id_empresa;
-      departamentos.value = [reportes.value.departamentos];
     };
 
     const filtrarEvaluacion = (nombre) =>
@@ -136,7 +157,21 @@ export default {
       columns,
       lista_s,
       filtrarEvaluacion,
-      calificacion,
+      departamentos,
+      reporte,
+      formatearFecha,
+      model: ref({}),
+      watch: {
+        model(nuevoValor, viejoValor) {
+          console.log("Nuevo valor", nuevoValor);
+          console.log("Viejo valor", viejoValor);
+          console.log(nuevoValor.id_departamento);
+          obtenerEvaluacion(
+            reporte.value.id_reporte,
+            nuevoValor.id_departamento
+          );
+        },
+      },
     };
   },
 };

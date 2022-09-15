@@ -4,7 +4,7 @@ import { ref } from 'vue'
 
 export const useEvaluacionStore = defineStore("evaluaciones", () => {
     const evaluacion = ref ([])
-    const obtenerEvaluacion = async (idReporte, idDepartamento) => {
+    const obtenerEvaluacion = async (idReporte="", idDepartamento="") => {
         try {
             const { data } = await api.get(`/evaluacion/${idReporte}/${idDepartamento}`)
             evaluacion.value = [...data]

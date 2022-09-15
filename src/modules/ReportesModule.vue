@@ -6,16 +6,69 @@
       </div>
       <q-separator color="primary" class="q-my-md" inset />
       <div class="q-pa-md">
-        <q-table :rows="reportes" :columns="columns">
+        <q-table
+          :rows="reportes"
+          :columns="columns"
+          row-key="id_reporte"
+          no-data-label="No se han encontrado reportes."
+          :filter="buscar"
+        >
+          <template v-slot:top-right>
+            <q-input
+              outlined
+              dense
+              debounce="300"
+              v-model="buscar"
+              placeholder="Buscar"
+            >
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
           <template v-slot:body-cell-acciones="props">
             <q-td>
               <q-btn
-                label="Ver detalles"
                 @click="verDetallesReportes(props.row.id_reporte)"
-              />
+                flat
+                color="dark"
+                icon="format_list_bulleted"
+              >
+                <q-tooltip> Ver Detalles </q-tooltip>
+              </q-btn>
+              <q-btn
+                @click="confirmarEliminarReporte(props.row.id_reporte)"
+                flat
+                color="negative"
+                icon="delete"
+              >
+                <q-tooltip> Eliminar Reporte </q-tooltip>
+              </q-btn>
             </q-td>
           </template>
         </q-table>
+        <template>
+          <q-dialog v-model="confirm" persistent>
+            <q-card>
+              <q-card-section class="row items-center">
+                <q-avatar icon="help_outline" text-color="negative" />
+                <span class="q-ml-sm"
+                  >¿Seguro que deseas eliminar este reporte de evaluación?</span
+                >
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn flat label="Cancelar" color="primary" v-close-popup />
+                <q-btn
+                  @click="eliminarReporte(reporte.id_reporte)"
+                  flat
+                  label="Eliminar"
+                  color="negative"
+                  v-close-popup
+                />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
+        </template>
         <ModalDetallesReporte ref="abrirModalRef"></ModalDetallesReporte>
       </div>
     </q-page-container>
@@ -23,15 +76,14 @@
 </template>
 
 <script>
-import { useReporteStore } from "../stores/reportes";
-
 import { ref, onMounted } from "vue";
-
 import { storeToRefs } from "pinia";
-
 import { formatearFecha } from "../helpers/formatearFecha";
-
 import ModalDetallesReporte from "../components/ModalDetallesReporte.vue";
+
+import { useReporteStore } from "../stores/reportes";
+import { useDepartamentosStore } from "../stores/departamentos";
+import { useEvaluacionStore } from "../stores/evaluacion";
 
 export default {
   components: {
@@ -39,12 +91,18 @@ export default {
   },
   setup() {
     const useReporte = useReporteStore();
-    // se estrae el metodo
-    const { obtenerReportes } = useReporte;
-    //se extrae el state
-    const { reportes } = storeToRefs(useReporte);
+    const { eliminarReporte, obtenerReportes, obtenerReporteId } = useReporte; // se extrae el metodo
+    const { reportes, reporte } = storeToRefs(useReporte); //se extrae el state
+
+    // const useEvaluacion = useEvaluacionStore();
+    // const { obtenerEvaluacion } = useEvaluacion;
+
+    const useDepartamento = useDepartamentosStore();
+    const { obtenerDepartamentos } = useDepartamento;
+    const { departamentos } = storeToRefs(useDepartamento);
 
     const abrirModalRef = ref(null);
+    const confirm = ref(false);
 
     const columns = [
       {
@@ -58,7 +116,7 @@ export default {
         name: "id_empresa",
         label: "Empresa",
         align: "left",
-        field: "id_empresa",
+        field: "empresa",
         sortable: true,
       },
       {
@@ -97,23 +155,34 @@ export default {
     };
 
     const verDetallesReportes = (id) => {
-      console.log(id);
+      obtenerReporteId(id);
+      obtenerDepartamentos(reporte.value.id_empresa);
       abrirModalRef.value.abrir(true);
       // abrirModalRef.value.abrirModal = true;
     };
 
     //  HOOK ciclo de vida del componente
     onMounted(() => {
-      obtenerReportes(8, 2022);
+      obtenerReportes();
     });
+
+    const confirmarEliminarReporte = (id) => {
+      obtenerReporteId(id);
+      confirm.value = true;
+    };
 
     return {
       columns,
       obtenerReportes,
       reportes,
+      reporte,
       buscarReporte,
       verDetallesReportes,
       abrirModalRef,
+      buscar: ref(""),
+      confirmarEliminarReporte,
+      confirm,
+      eliminarReporte,
     };
   },
 };

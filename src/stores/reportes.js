@@ -33,14 +33,21 @@ export const useReporteStore = defineStore("reportes", () => {
         console.log(reporteObj)
         try{
             const { data } = await api.post('/reporte', reporteObj)
-            console.log("se inserto el  reporte ", reporteObj)
             reportes.value = [ data, ... reportes.value ]
-            console.log(data)
-            // obtenerReportes()
         } catch(error){
             console.log(error)
         }
     }
+    const obtenerIdReporteNuevo = async () => {
+        try{
+            const { data } = await api.get('/nuevo/reporte')
+            const  id = data[0].id_reporte
+        } catch(error){
+            console.log(error)
+        }
+    }
+
+
 
     return {
         obtenerReportes,

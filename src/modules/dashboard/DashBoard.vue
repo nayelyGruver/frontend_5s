@@ -45,7 +45,6 @@ import { storeToRefs } from "pinia";
 export default {
   setup() {
     const useReporte = useReporteStore();
-    const { obtenerReportes } = useReporte; // se extrae el metodo
     const { reportes } = storeToRefs(useReporte);
 
     const useEmpresas = useEmpresasStore();
@@ -57,14 +56,12 @@ export default {
     const { calificacionMes, calificacionAnio } = storeToRefs(useMetricas);
 
     onMounted(() => {
-      obtenerReportes();
       obtenerEmpresas();
       obtenerCalificacionMes();
       obtenerCalificacionAnio();
     });
 
     return {
-      obtenerReportes,
       reportes,
       empresas,
       calificacionMes,

@@ -91,6 +91,7 @@ export default {
 
     let reporteObj = reactive({
       usuario: "nperez",
+      empresa: "GRUVER",
       id_empresa: 10,
       fecha: "2022/09/15",
     });

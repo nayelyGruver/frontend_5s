@@ -88,6 +88,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
+
 import { formatearFecha } from "../helpers/formatearFecha";
 import ModalDetallesReporte from "../components/ModalDetallesReporte.vue";
 import ModalNuevoReporte from "../components/ModalNuevoReporte.vue";
@@ -103,11 +104,12 @@ export default {
   },
   setup() {
     const useReporte = useReporteStore();
-    const { eliminarReporte, obtenerReportes, obtenerReporteId } = useReporte; // se extrae el metodo
-    const { reportes, reporte } = storeToRefs(useReporte); //se extrae el state
+    const { eliminarReporte, obtenerReportes, obtenerReporteId } = useReporte;
+    const { reportes, reporte } = storeToRefs(useReporte);
 
-    // const useEvaluacion = useEvaluacionStore();
-    // const { obtenerEvaluacion } = useEvaluacion;
+    const useEvaluacion = useEvaluacionStore();
+    const { obtenerEvaluacion } = useEvaluacion;
+    const { evaluacion } = storeToRefs(useEvaluacion);
 
     const useDepartamento = useDepartamentosStore();
     const { obtenerDepartamentos } = useDepartamento;
@@ -162,25 +164,19 @@ export default {
       },
     ];
 
-    const buscarReporte = (mes, anio) => {
-      obtenerReportes(mes, anio);
-      console.log(reportes.value);
-    };
-
     const verDetallesReportes = (id) => {
       obtenerReporteId(id);
-      obtenerDepartamentos(reporte.value.id_empresa);
-      abrirModalRef.value.abrir(true);
-      // abrirModalRef.value.abrirModal = true;
+      obtenerDepartamentos(reporte.value.id_empresa).then(() => {
+        obtenerEvaluacion(id, departamentos.value[0]?.id_departamento);
+        abrirModalRef.value.abrir(true);
+        console.log(evaluacion);
+      });
     };
 
     const crearNuevoReporte = () => {
-      console.log("nuevo reporte");
       modalNuevoReporte.value.abrir(true);
-      // modalEmpresas.value.abrir(true);
     };
 
-    //  HOOK ciclo de vida del componente
     onMounted(() => {
       obtenerReportes();
     });
@@ -192,10 +188,8 @@ export default {
 
     return {
       columns,
-      obtenerReportes,
       reportes,
       reporte,
-      buscarReporte,
       verDetallesReportes,
       abrirModalRef,
       buscar: ref(""),

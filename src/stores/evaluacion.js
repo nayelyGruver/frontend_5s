@@ -8,14 +8,13 @@ export const useEvaluacionStore = defineStore("evaluaciones", () => {
         try {
             const { data } = await api.get(`/evaluacion/${idReporte}/${idDepartamento}`)
             evaluacion.value = [...data]
-            console.log(data)
         } catch(error){
             console.log(error)
         }
     }
-    
+
     return {
         obtenerEvaluacion,
-        evaluacion, 
+        evaluacion,
     }
 })

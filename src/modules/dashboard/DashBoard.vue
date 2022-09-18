@@ -36,12 +36,12 @@
 </template>
 
 <script>
+import { onMounted } from "vue";
+import { storeToRefs } from "pinia";
+
 import { useReporteStore } from "../../stores/reportes";
 import { useEmpresasStore } from "../../stores/empresas";
 import { useMetricasStore } from "../../stores/metricas";
-
-import { onMounted } from "vue";
-import { storeToRefs } from "pinia";
 export default {
   setup() {
     const useReporte = useReporteStore();

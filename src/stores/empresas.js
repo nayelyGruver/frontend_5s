@@ -8,13 +8,12 @@ export const useEmpresasStore = defineStore("empresas", () => {
         try {
             const { data } = await api.get(`/empresas`)
             empresas.value = [...data]
-            console.log("empresas DESDE STORE", empresas.value)
         } catch(error){
             console.log(error)
         }
     }
     return {
         obtenerEmpresas,
-        empresas, 
+        empresas,
     }
 })

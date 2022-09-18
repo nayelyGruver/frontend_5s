@@ -97,7 +97,6 @@ export default {
     });
 
     const guardarReporte = () => {
-      console.log("GUARDAR REPORTE");
       insertarReporte(reporteObj);
     };
 

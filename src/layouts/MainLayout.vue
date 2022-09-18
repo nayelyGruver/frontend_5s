@@ -39,9 +39,11 @@
 
 <script>
 import { ref, onMounted, computed } from "vue";
-import NavBar from "../components/NavBar.vue";
-import { useUsuarioStore } from "../stores/usuarios";
 import { storeToRefs } from "pinia";
+
+import NavBar from "../components/NavBar.vue";
+
+import { useUsuarioStore } from "../stores/usuarios";
 import { useMetricasStore } from "../stores/metricas";
 import { useEmpresasStore } from "../stores/empresas";
 

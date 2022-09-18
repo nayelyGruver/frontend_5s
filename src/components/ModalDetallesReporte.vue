@@ -63,6 +63,7 @@ import { formatearFecha } from "../helpers/formatearFecha";
 
 import { useEvaluacionStore } from "../stores/evaluacion";
 import { useReporteStore } from "../stores/reportes";
+
 import { useDepartamentosStore } from "../stores/departamentos";
 
 export default {
@@ -79,17 +80,15 @@ export default {
     const useDepartamento = useDepartamentosStore();
     const { departamentos } = storeToRefs(useDepartamento);
 
-    const model = ref([]);
-
     onMounted(() => {});
 
     const abrir = () => {
       //TODO:
-      obtenerEvaluacion(
-        reporte.value.id_reporte,
-        //TODO:
-        departamentos.value[0].id_departamento //<------------NO CARGA LA PRIMERA VEZ
-      );
+      // obtenerEvaluacion(
+      //   reporte.value.id_reporte
+      //   //TODO:
+      //   // departamentos.value[0].id_departamento //<------------NO CARGA LA PRIMERA VEZ
+      // );
       // model.value = departamentos.value[0];
       abrirModal.value = true;
     };
@@ -113,7 +112,7 @@ export default {
         field: "criterio",
         sortable: false,
         style:
-          "text-transform: uppercase; white-space: unset !important; width: 10%",
+          "text-transform: uppercase; white-space: unset !important; width: 10%;  font-weight: bold",
       },
       {
         name: "descripcion",
@@ -160,7 +159,7 @@ export default {
       departamentos,
       reporte,
       formatearFecha,
-      model: ref({}),
+      model: ref(departamentos.value[0]),
       watch: {
         model(nuevoValor, viejoValor) {
           console.log("Nuevo valor", nuevoValor);

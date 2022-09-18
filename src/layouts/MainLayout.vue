@@ -41,8 +41,9 @@
 import { ref, onMounted, computed } from "vue";
 import NavBar from "../components/NavBar.vue";
 import { useUsuarioStore } from "../stores/usuarios";
-import { useReporteStore } from "../stores/reportes";
 import { storeToRefs } from "pinia";
+import { useMetricasStore } from "../stores/metricas";
+import { useEmpresasStore } from "../stores/empresas";
 
 export default {
   components: {
@@ -54,12 +55,17 @@ export default {
     const { obtenerUsuarios } = useUsuario;
     const leftDrawerOpen = ref(false);
 
-    const useReporte = useReporteStore();
-    const { obtenerReportes } = useReporte; // se extrae el metodo
+    const useMetricas = useMetricasStore();
+    const { obtenerCalificacionMes, obtenerCalificacionAnio } = useMetricas;
+
+    const useEmpresas = useEmpresasStore();
+    const { obtenerEmpresas } = useEmpresas;
 
     onMounted(() => {
       obtenerUsuarios();
-      obtenerReportes();
+      obtenerEmpresas();
+      obtenerCalificacionMes();
+      obtenerCalificacionAnio();
     });
 
     const inicialesUsuario = (nombre) =>

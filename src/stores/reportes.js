@@ -6,7 +6,7 @@ export const useReporteStore = defineStore("reportes", () => {
     //propiedades reactivas - se estrae con useToRef
     const reportes  = ref ([])
     const reporte = ref(null)
-    //funciones o actions 
+    //funciones o actions
     const obtenerReportes = async() => {
         try{
             const { data } = await api.get(`/reportes`)
@@ -27,7 +27,7 @@ export const useReporteStore = defineStore("reportes", () => {
         }catch(error){
             console.log(error)
         }
-        
+
     }
     const insertarReporte = async (reporteObj) => {
         console.log(reporteObj)
@@ -38,6 +38,9 @@ export const useReporteStore = defineStore("reportes", () => {
             console.log(error)
         }
     }
+
+
+
     const obtenerIdReporteNuevo = async () => {
         try{
             const { data } = await api.get('/nuevo/reporte')
@@ -54,7 +57,7 @@ export const useReporteStore = defineStore("reportes", () => {
         obtenerReporteId,
         eliminarReporte,
         reportes,
-        reporte, 
+        reporte,
         insertarReporte
     }
 })

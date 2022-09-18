@@ -1,6 +1,6 @@
 <template>
   <div class="contenedor">
-    <h2>Inicio</h2>
+    <div class="q-pt-lg"><span class="text-h2">Inicio</span></div>
     <q-separator color="primary" class="q-my-md" inset />
     <div class="cards-dashboard">
       <q-card class="card">
@@ -45,20 +45,17 @@ import { storeToRefs } from "pinia";
 export default {
   setup() {
     const useReporte = useReporteStore();
+    const { obtenerReportes } = useReporte;
     const { reportes } = storeToRefs(useReporte);
 
     const useEmpresas = useEmpresasStore();
-    const { obtenerEmpresas } = useEmpresas;
     const { empresas } = storeToRefs(useEmpresas);
 
     const useMetricas = useMetricasStore();
-    const { obtenerCalificacionMes, obtenerCalificacionAnio } = useMetricas;
     const { calificacionMes, calificacionAnio } = storeToRefs(useMetricas);
 
     onMounted(() => {
-      obtenerEmpresas();
-      obtenerCalificacionMes();
-      obtenerCalificacionAnio();
+      obtenerReportes();
     });
 
     return {

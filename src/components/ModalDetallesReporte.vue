@@ -17,10 +17,13 @@
               :options="departamentos"
               option-label="nombre"
               label="Departamento"
+              @update:model-value="
+                obtenerEvaluacion(reporte.id_reporte, model.id_departamento)
+              "
             >
               <template v-slot:selected>
                 <q-chip color="white" text-color="primary" class="q-ma-none">
-                  {{ model.nombre }}
+                  {{ model?.nombre }}
                 </q-chip>
               </template>
             </q-select>
@@ -78,6 +81,7 @@ export default {
     const { reporte } = storeToRefs(useReporte);
 
     const useDepartamento = useDepartamentosStore();
+
     const { departamentos } = storeToRefs(useDepartamento);
 
     onMounted(() => {});
@@ -159,20 +163,23 @@ export default {
       departamentos,
       reporte,
       formatearFecha,
-      model: ref(departamentos.value[0]),
-      watch: {
-        model(nuevoValor, viejoValor) {
-          console.log("Nuevo valor", nuevoValor);
-          console.log("Viejo valor", viejoValor);
-          console.log(nuevoValor.id_departamento);
-          obtenerEvaluacion(
-            reporte.value.id_reporte,
-            nuevoValor.id_departamento
-          );
-        },
-      },
+      model: ref(departamentos?.value[0]),
     };
   },
+  // watch: {
+  //   model(nuevoValor, viejoValor) {
+  //     console.log("Nuevo valor", nuevoValor);
+  //     console.log("Viejo valor", viejoValor);
+  //     console.log(nuevoValor.id_departamento);
+  //     this.recargarEvaluacion(this.reporte?.value.id_reporte, nuevoValor);
+  //     // obtenerEvaluacion(reporte.value.id_reporte, nuevoValor.id_departamento);
+  //   },
+  // },
+  // methods: {
+  //   async recargarEvaluacion(id_reporte, nuevoValor) {
+  //     this.obtenerEvaluacion(id_reporte, nuevoValor.id_departamento);
+  //   },
+  // },
 };
 </script>
 

@@ -66,28 +66,52 @@
               type="submit"
               label="Iniciar Evaluación"
               color="primary"
-            />
+              :loading="submitting"
+            >
+              <template v-slot:loading>
+                <q-spinner-facebook />
+              </template>
+            </q-btn>
           </q-card-actions>
         </q-form>
       </q-card-section>
     </q-card>
+    <ModalEvaluacion ref="abrirModalEvaluacionRef"></ModalEvaluacion>
   </q-dialog>
 </template>
 
 <script>
 import { useEmpresasStore } from "../stores/empresas.js";
 import { useReporteStore } from "../stores/reportes.js";
+import { useEvaluacionStore } from "../stores/evaluacion.js";
+
 import { ref, reactive, onMounted } from "vue";
 import { storeToRefs } from "pinia";
+import ModalEvaluacion from "../components/ModalEvaluacion.vue";
+import { useDepartamentosStore } from "../stores/departamentos";
 
 export default {
+  components: {
+    ModalEvaluacion,
+  },
   setup() {
     const useEmpresa = useEmpresasStore();
     const { obtenerEmpresas } = useEmpresa;
     const { empresas } = storeToRefs(useEmpresa);
 
     const useReportes = useReporteStore();
-    const { insertarReporte } = useReportes;
+    const { insertarReporte, insercionCriteriosEvaluacion } = useReportes;
+    const { reporte } = storeToRefs(useReportes);
+    const submitting = ref(false);
+    const model = ref({ id_departamento: "", nombre: "" });
+    const abrirModalEvaluacionRef = ref(null);
+
+    const useEvaluacion = useEvaluacionStore();
+    const { obtenerEvaluacion } = useEvaluacion;
+    const { evaluacion } = storeToRefs(useEvaluacion);
+    const useDepartamento = useDepartamentosStore();
+    const { obtenerDepartamentos } = useDepartamento;
+    const { departamentos } = storeToRefs(useDepartamento);
 
     let reporteObj = reactive({
       usuario: "nperez",
@@ -97,7 +121,25 @@ export default {
     });
 
     const guardarReporte = () => {
-      insertarReporte(reporteObj);
+      submitting.value = true;
+      //Iserta el nuevo reporte y carga en el state reporte nuevo e Inserción masiva de evaluación de criterios
+      reporte.value = insertarReporte(reporteObj);
+      console.log("REPORTE NUEVO", reporte);
+      obtenerDepartamentos(reporteObj.id_empresa).then(() => {
+        model.value = departamentos.value[0];
+      });
+      console.log("MODEL VALUE", model);
+      setTimeout(() => {
+        // abrirModal.value = false;
+        obtenerEvaluacion(
+          reporte.value.id_reporte,
+          model.value.id_departamento
+        );
+        abrirModalEvaluacionRef.value.abrir(true);
+        submitting.value = false;
+      }, 2000);
+      //abrir nuevo modal
+      console.log("ANTES DE ABRIR EL MODAL");
     };
 
     const abrirModal = ref(false);
@@ -110,11 +152,13 @@ export default {
     return {
       abrir,
       abrirModal,
+      abrirModalEvaluacionRef,
       modelEmpresa: ref({ id_empresa: 10, nombre: "GRUVER" }),
       date: ref("2022/09/15"),
       empresas,
       reporteObj,
       guardarReporte,
+      submitting,
     };
   },
 };

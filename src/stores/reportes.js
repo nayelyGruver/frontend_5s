@@ -33,11 +33,26 @@ export const useReporteStore = defineStore("reportes", () => {
             const { data } = await api.post('/reporte', reporteObj)
             reportes.value = [ data, ... reportes.value ]
             console.log("Insertando Reporte", data)
+            //carga en el state reporte nuevo
+            obtenerReporteId(data.id_reporte)
+            //Inserción masiva de evaluación de criterios
+            insercionCriteriosEvaluacion(data)
+            console.log(data.id_reporte)
+            return data.id_reporte
         } catch(error){
             console.log(error)
         }
     }
 
+    const insercionCriteriosEvaluacion = async (reporteObj) => {
+      try{
+          const { data } = await api.post('/criterios', reporteObj)
+          console.log("DESDE INSERCION DE CRITERIOS DE EVALUACION", data)
+          return data
+      } catch(error){
+          console.log(error)
+      }
+  }
     return {
         obtenerReportes,
         obtenerReporteId,

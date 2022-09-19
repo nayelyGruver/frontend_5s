@@ -83,17 +83,12 @@ export default {
     const useDepartamento = useDepartamentosStore();
 
     const { departamentos } = storeToRefs(useDepartamento);
+    const model = ref({});
 
     onMounted(() => {});
 
     const abrir = () => {
-      //TODO:
-      // obtenerEvaluacion(
-      //   reporte.value.id_reporte
-      //   //TODO:
-      //   // departamentos.value[0].id_departamento //<------------NO CARGA LA PRIMERA VEZ
-      // );
-      // model.value = departamentos.value[0];
+      model.value = departamentos.value[0];
       abrirModal.value = true;
     };
 
@@ -163,7 +158,9 @@ export default {
       departamentos,
       reporte,
       formatearFecha,
-      model: ref(departamentos?.value[0]),
+      // model: ref({ id_departamento: 21, nombre: "ACONDICIONAMIENTO" }),
+      // model: ref(departamentos.value[0]),
+      model,
     };
   },
   // watch: {

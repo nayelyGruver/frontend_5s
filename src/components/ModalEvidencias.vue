@@ -102,7 +102,7 @@
             <q-card-actions align="right">
               <q-btn
                 flat
-                label="Terminar evaluación"
+                label="Terminar captura de evidencias"
                 color="primary"
                 v-close-popup
                 @click="finalizarEvaluacion()"

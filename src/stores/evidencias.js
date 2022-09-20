@@ -4,26 +4,26 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useEvidenciasStore = defineStore("evidencias", () => {
-    const cargaEvidencia = ref ([])
+    const evidenciaCargada = ref (null)
     const evidencia = ref([])
     const evidencias = ref([])
 
     const guardarImagen = async (bodyFormData) => {
       console.log("DESDE EL STORE EVIDENCIAS" , bodyFormData)
         try {
-            const {data} = await apiUpload.post(`/image`, bodyFormData)
-            cargaEvidencia.value = data
-            console.log("EVIDENCIAS DESDE EL STORE", cargaEvidencia.value)
+            const { data } = await apiUpload.post(`/image`, bodyFormData)
+            evidenciaCargada.value = data
+            console.log("EVIDENCIAS DESDE EL STORE", evidenciaCargada.value)
         } catch(error){
             console.log(error)
         }
     }
     //url foto, idreporte, iddepartamento, id area
-    const guardarReferenciaImagen = async (evidencia) => {
-      console.log("DESDE guardar referencia a imagen" , evidencia)
+    const guardarReferenciaImagen = async (evidenciaObj) => {
+      console.log("DESDE guardar referencia a imagen" , evidenciaObj)
         try {
-            const { data } = await api.post(`/evidencia`, evidencia)
-            evidencia.value = data
+            const { data } = await api.post(`/evidencia`, evidenciaObj)
+            // evidencia.value = data
         } catch(error){
             console.log(error)
         }
@@ -45,7 +45,7 @@ export const useEvidenciasStore = defineStore("evidencias", () => {
     return {
       guardarReferenciaImagen,
       guardarImagen,
-      cargaEvidencia,
+      evidenciaCargada,
       cargarEvidencias,
       evidencias,
       evidencia

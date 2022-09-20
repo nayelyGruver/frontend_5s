@@ -105,7 +105,7 @@ export default {
     const submitting = ref(false);
     const model = ref({ id_departamento: "", nombre: "" });
     const abrirModalEvaluacionRef = ref(null);
-
+ 
     const useEvaluacion = useEvaluacionStore();
     const { obtenerEvaluacion } = useEvaluacion;
     const { evaluacion } = storeToRefs(useEvaluacion);

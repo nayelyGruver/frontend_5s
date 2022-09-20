@@ -5,7 +5,6 @@
         <q-card-section
           class="bg-primary text-white row items-center q-pb-none"
         >
-          <!-- <q-btn icon="close" flat round dense v-close-popup /> -->
           <h2 class="">
             Captura de Evidencias 5'S - {{ reporte.empresa }} -
             {{ formatearFecha(reporte.fecha) }}
@@ -79,7 +78,7 @@
             </div>
             <div class="q-pa-md q-gutter-sm row justify-end">
               <q-img
-                :src="cargaEvidencia?.url"
+                :src="evidenciaCargada?.url"
                 loading="lazy"
                 spinner-color="white"
                 height="140px"
@@ -120,6 +119,7 @@
 import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { formatearFecha } from "../helpers/formatearFecha";
+
 import { useReporteStore } from "../stores/reportes";
 import { useEvidenciasStore } from "../stores/evidencias";
 import { useDepartamentosStore } from "../stores/departamentos";
@@ -137,10 +137,11 @@ export default {
 
     const useEvidencia = useEvidenciasStore();
     const { guardarImagen, guardarReferenciaImagen } = useEvidencia;
-    const { cargaEvidencia } = storeToRefs(useEvidencia);
+    const { evidenciaCargada } = storeToRefs(useEvidencia);
+    const bodyFormData = new FormData();
 
     const abrir = () => {
-      console.log("DESDE EL MODAL EVALUACION");
+      console.log("DESDE EL MODAL EVIDENCIAS");
       model.value = departamentos.value[0];
       abrirModalEvidencias.value = true;
     };
@@ -150,20 +151,17 @@ export default {
     onMounted(() => {});
 
     const enviarEvidencia = (file, modelDepto, modelAre) => {
-      // console.log(modelArchivo);
-      // console.log(file);
-      var bodyFormData = new FormData();
       bodyFormData.append("image", file);
-      guardarImagen(bodyFormData);
-      console.log(cargaEvidencia.value?.url);
-
-      const evidencia = {
-        url_imagen: cargaEvidencia.value?.url,
-        id_reporte: reporte.value.id_reporte,
-        id_departamento: modelDepto.id_departamento,
-        id_area: modelAre.id_area,
-      };
-      guardarReferenciaImagen(evidencia);
+      guardarImagen(bodyFormData).then(() => {
+        console.log(evidenciaCargada.value?.url);
+        const evidencia = {
+          url_imagen: evidenciaCargada.value?.url,
+          id_reporte: reporte.value.id_reporte,
+          id_departamento: modelDepto.id_departamento,
+          id_area: modelAre.id_area,
+        };
+        guardarReferenciaImagen(evidencia);
+      });
     };
 
     const filtrarEvaluacion = (nombre) =>
@@ -184,7 +182,7 @@ export default {
       model,
       cumpleModel: ref(null),
       finalizarEvaluacion,
-      cargaEvidencia,
+      evidenciaCargada,
       enviarEvidencia,
       modelArchivo,
       modelArea: ref({ id_area: 1, nombre: "Area en buenas condiciones" }),

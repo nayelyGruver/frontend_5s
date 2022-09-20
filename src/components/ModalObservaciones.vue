@@ -32,7 +32,9 @@
               color="primary"
               :loading="submitting"
               :disabled="isDisabled"
+
             >
+            <!-- TODO: QUE EL BOTON SE VUELVA A HABILIAR CUANDO SE ABRA OTRA VEZ -->
               <template v-slot:loading>
                 <q-spinner-facebook />
               </template>

@@ -61,6 +61,9 @@
           </q-card-actions>
         </q-card>
       </q-page-container>
+      <ModalDetalleEvidencia
+        ref="abrirModalDetalleEvidenciaRef"
+      ></ModalDetalleEvidencia>
     </q-dialog>
   </div>
 </template>
@@ -75,8 +78,12 @@ import { useReporteStore } from "../stores/reportes";
 
 import { useDepartamentosStore } from "../stores/departamentos";
 import { useEvidenciasStore } from "../stores/evidencias";
+import ModalDetalleEvidencia from "../components/ModalDetalleEvidencias.vue";
 
 export default {
+  components: {
+    ModalDetalleEvidencia,
+  },
   setup() {
     const abrirModal = ref(false);
 
@@ -96,6 +103,8 @@ export default {
     const { evidencias } = storeToRefs(useEvidencias);
     const model = ref({});
 
+    const abrirModalDetalleEvidenciaRef = ref(null);
+
     onMounted(() => {});
 
     const abrir = () => {
@@ -110,6 +119,7 @@ export default {
       console.log("ESTAS EN EL METODO VER EVIDENCIAS");
       cargarEvidencias(reporte.value, departamentos.value[0]).then(() => {
         console.log(evidencias.value[0]?.path_foto);
+        abrirModalDetalleEvidenciaRef.value.abrir(true);
       });
     };
     const lista_s = [
@@ -179,6 +189,7 @@ export default {
       // model: ref(departamentos.value[0]),
       model,
       verEvidencias,
+      abrirModalDetalleEvidenciaRef,
     };
   },
   // watch: {

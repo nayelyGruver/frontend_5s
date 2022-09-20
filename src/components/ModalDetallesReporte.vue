@@ -51,7 +51,13 @@
         </div>
         <q-card>
           <q-card-actions align="right">
-            <q-btn flat label="OK" color="primary" v-close-popup />
+            <q-btn
+              flat
+              label="Ver evidencias"
+              color="primary"
+              @click="verEvidencias()"
+            />
+            <q-btn flat label="Cerrar" color="primary" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-page-container>
@@ -68,6 +74,7 @@ import { useEvaluacionStore } from "../stores/evaluacion";
 import { useReporteStore } from "../stores/reportes";
 
 import { useDepartamentosStore } from "../stores/departamentos";
+import { useEvidenciasStore } from "../stores/evidencias";
 
 export default {
   setup() {
@@ -83,6 +90,10 @@ export default {
     const useDepartamento = useDepartamentosStore();
 
     const { departamentos } = storeToRefs(useDepartamento);
+
+    const useEvidencias = useEvidenciasStore();
+    const { cargarEvidencias } = useEvidencias;
+    const { evidencias } = storeToRefs(useEvidencias);
     const model = ref({});
 
     onMounted(() => {});
@@ -95,6 +106,12 @@ export default {
     const filtrarEvaluacion = (nombre) =>
       evaluacion.value.filter((criterio) => criterio.nombre_s === nombre);
 
+    const verEvidencias = () => {
+      console.log("ESTAS EN EL METODO VER EVIDENCIAS");
+      cargarEvidencias(reporte.value, departamentos.value[0]).then(() => {
+        console.log(evidencias.value[0]?.path_foto);
+      });
+    };
     const lista_s = [
       { nombre: "clasificar" },
       { nombre: "ordenar" },
@@ -161,6 +178,7 @@ export default {
       // model: ref({ id_departamento: 21, nombre: "ACONDICIONAMIENTO" }),
       // model: ref(departamentos.value[0]),
       model,
+      verEvidencias,
     };
   },
   // watch: {

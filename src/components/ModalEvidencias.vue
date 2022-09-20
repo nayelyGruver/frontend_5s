@@ -5,15 +5,17 @@
         <q-card-section
           class="bg-primary text-white row items-center q-pb-none"
         >
+          <!-- <q-btn icon="close" flat round dense v-close-popup /> -->
           <h2 class="">
             Captura de Evidencias 5'S - {{ reporte.empresa }} -
             {{ formatearFecha(reporte.fecha) }}
           </h2>
           <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-card-section>
-          <q-form @submit.prevent="enviarEvidencia(modelArchivo)">
+          <q-form
+            @submit.prevent="enviarEvidencia(modelArchivo, model, modelArea)"
+          >
             <div class="q-my-md in">
               <label>Departamento</label>
               <q-select
@@ -55,7 +57,7 @@
                 <label>Area de clasificacion</label>
                 <q-select
                   filled
-                  v-model="model"
+                  v-model="modelArea"
                   :options="departamentos"
                   option-label="nombre"
                   label="Area"
@@ -69,11 +71,20 @@
                       text-color="primary"
                       class="q-ma-none"
                     >
-                      {{ model?.nombre }}
+                      {{ modelArea?.nombre }}
                     </q-chip>
                   </template>
                 </q-select>
               </div>
+            </div>
+            <div class="q-pa-md q-gutter-sm row justify-end">
+              <q-img
+                :src="cargaEvidencia?.url"
+                loading="lazy"
+                spinner-color="white"
+                height="140px"
+                style="max-width: 150px"
+              />
             </div>
             <q-card-actions align="left">
               <q-btn
@@ -87,6 +98,7 @@
                 </template>
               </q-btn>
             </q-card-actions>
+
             <q-separator color="" class="" inset />
             <q-card-actions align="right">
               <q-btn
@@ -124,7 +136,7 @@ export default {
     const abrirModalEvidencias = ref(false);
 
     const useEvidencia = useEvidenciasStore();
-    const { guardarImagen } = useEvidencia;
+    const { guardarImagen, guardarReferenciaImagen } = useEvidencia;
     const { cargaEvidencia } = storeToRefs(useEvidencia);
 
     const abrir = () => {
@@ -137,12 +149,21 @@ export default {
 
     onMounted(() => {});
 
-    const enviarEvidencia = (file) => {
+    const enviarEvidencia = (file, modelDepto, modelAre) => {
       // console.log(modelArchivo);
       // console.log(file);
       var bodyFormData = new FormData();
       bodyFormData.append("image", file);
       guardarImagen(bodyFormData);
+      console.log(cargaEvidencia.value?.url);
+
+      const evidencia = {
+        url_imagen: cargaEvidencia.value?.url,
+        id_reporte: reporte.value.id_reporte,
+        id_departamento: modelDepto.id_departamento,
+        id_area: modelAre.id_area,
+      };
+      guardarReferenciaImagen(evidencia);
     };
 
     const filtrarEvaluacion = (nombre) =>
@@ -163,8 +184,10 @@ export default {
       model,
       cumpleModel: ref(null),
       finalizarEvaluacion,
+      cargaEvidencia,
       enviarEvidencia,
       modelArchivo,
+      modelArea: ref({ id_area: 1, nombre: "Area en buenas condiciones" }),
     };
   },
 };

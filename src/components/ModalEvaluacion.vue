@@ -129,6 +129,7 @@ export default {
     const useDepartamento = useDepartamentosStore();
 
     const { departamentos } = storeToRefs(useDepartamento);
+
     const model = ref({});
     const abrirModalEvaluacion = ref(false);
     const abrirModalObservacionesRef = ref(null);

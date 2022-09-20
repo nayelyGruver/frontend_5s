@@ -4,6 +4,7 @@ import { ref } from 'vue'
 
 export const useEvaluacionStore = defineStore("evaluaciones", () => {
     const evaluacion = ref ([])
+    const criterioEvaluacion = ref(null)
     const obtenerEvaluacion = async (idReporte="", idDepartamento="") => {
         try {
             const { data } = await api.get(`/evaluacion/${idReporte}/${idDepartamento}`)
@@ -12,6 +13,9 @@ export const useEvaluacionStore = defineStore("evaluaciones", () => {
             console.log(error)
         }
     }
+    const obtenerCriterioEvaluacion = ( id ) => {
+      criterioEvaluacion.value = evaluacion.value.find( criterio => criterio.id_evaluacion === id )
+  }
 
     const puntuarNoCumpleCriterio = async (evaluacionCriterio) => {
       console.log(evaluacionCriterio)
@@ -25,9 +29,22 @@ export const useEvaluacionStore = defineStore("evaluaciones", () => {
           }
     }
 
+    const agregarObservacionCriterio  = async (criterioEvaluacion) => {
+      console.log(criterioEvaluacion.value)
+          try {
+              const { data } = await api.put(`/observaciones`, criterioEvaluacion.value)
+              return data
+          } catch(error){
+              console.log(error)
+          }
+    }
+
       return {
           obtenerEvaluacion,
           evaluacion,
-          puntuarNoCumpleCriterio
+          puntuarNoCumpleCriterio,
+          agregarObservacionCriterio,
+          obtenerCriterioEvaluacion,
+          criterioEvaluacion
       }
 })

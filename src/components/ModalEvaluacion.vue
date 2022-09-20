@@ -5,7 +5,7 @@
         <div class="q-px-lg">
           <div class="row items-baseline justify-between">
             <h2 class="text-dark">
-              Detalles Reporte de Evaluación 5'S - {{ reporte.empresa }} -
+              Proceso de Evaluación 5'S - {{ reporte.empresa }} -
               {{ formatearFecha(reporte.fecha) }}
             </h2>
           </div>
@@ -40,24 +40,15 @@
             :rows-per-page-options="[0]"
             ><template v-slot:body-cell-cumple="props">
               <q-td class="space-around justify-evenly aling-items-center">
-                <!-- <q-btn
-                  @click="puntuar(props.row.puntos)"
-                  flat
-                  color="dark"
-                  icon="format_list_bulleted"
-                >
-                  <q-tooltip> Cumple con el criterio </q-tooltip>
-                </q-btn> -->
-                <!-- <div class="q-gutter-sm">
-                  <q-toggle toggle-indeterminate v-model="cumpleModel" />
-                </div> -->
                 <q-btn
                   @click="puntuarNoCumple(props.row.id_evaluacion, props.class)"
                   icon="close"
                   round
                   label=""
                   color="negative"
-                />
+                >
+                  <q-tooltip> Agregar Observación </q-tooltip>
+                </q-btn>
                 <q-btn
                   @click="puntuarCumple(props.row.id_evaluacion, props.class)"
                   icon="done"
@@ -94,13 +85,13 @@
               flat
               label="SUBIR EVIDENCIAS"
               color="primary"
-              v-close-popup
-              @click="cargarEvidencias()"
+              @click="subirEvidencias()"
             />
           </q-card-actions>
         </q-card>
       </q-page-container>
-      <ModalEvaluacion ref="abrirModalEvaluacionRef"></ModalEvaluacion>
+      <ModalObservaciones ref="abrirModalObservacionesRef"></ModalObservaciones>
+      <ModalEvidencias ref="abrirModalEvidenciasRef"></ModalEvidencias>
     </q-dialog>
   </div>
 </template>
@@ -113,21 +104,34 @@ import { useEvaluacionStore } from "../stores/evaluacion";
 import { useReporteStore } from "../stores/reportes";
 
 import { useDepartamentosStore } from "../stores/departamentos";
+import ModalObservaciones from "src/components/ModalObservaciones.vue";
+import ModalEvidencias from "../components/ModalEvidencias.vue";
 
 export default {
+  components: {
+    ModalObservaciones,
+    ModalEvidencias,
+  },
   setup() {
     const useEvaluacion = useEvaluacionStore();
-    const { obtenerEvaluacion, puntuarNoCumpleCriterio } = useEvaluacion;
+    const {
+      obtenerEvaluacion,
+      puntuarNoCumpleCriterio,
+      obtenerCriterioEvaluacion,
+    } = useEvaluacion;
     const { evaluacion } = storeToRefs(useEvaluacion);
 
     const useReporte = useReporteStore();
+    const { obtenerReporteId } = useReporte;
     const { reporte } = storeToRefs(useReporte);
+    const abrirModalEvidenciasRef = ref(null);
 
     const useDepartamento = useDepartamentosStore();
 
     const { departamentos } = storeToRefs(useDepartamento);
     const model = ref({});
     const abrirModalEvaluacion = ref(false);
+    const abrirModalObservacionesRef = ref(null);
 
     const abrir = () => {
       console.log("DESDE EL MODAL EVALUACION");
@@ -142,6 +146,8 @@ export default {
 
     const agregarObservaciones = (id_evaluacion) => {
       console.log("Agregar Observaciones", id_evaluacion);
+      obtenerCriterioEvaluacion(id_evaluacion);
+      abrirModalObservacionesRef.value.abrir(true);
     };
 
     const puntuarCumple = (id_evaluacion) => {
@@ -155,8 +161,10 @@ export default {
       console.log("Puntuar No Cumple", id_evaluacion);
     };
 
-    const cargarEvidencias = () => {};
-    const finalizarEvaluacion = () => {};
+    const subirEvidencias = () => {
+      console.log("en subir evidencias");
+      abrirModalEvidenciasRef.value.abrir(true);
+    };
     const lista_s = [
       { nombre: "clasificar" },
       { nombre: "ordenar" },
@@ -215,8 +223,9 @@ export default {
       agregarObservaciones,
       puntuarCumple,
       puntuarNoCumple,
-      cargarEvidencias,
-      finalizarEvaluacion,
+      subirEvidencias,
+      abrirModalObservacionesRef,
+      abrirModalEvidenciasRef,
     };
   },
 };

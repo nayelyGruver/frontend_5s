@@ -13,7 +13,7 @@
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-card-section>
-          <q-form @submit.prevent="guardarEvidencia()">
+          <q-form @submit.prevent="enviarEvidencia(modelArchivo)">
             <div class="q-my-md in">
               <label>Departamento</label>
               <q-select
@@ -109,7 +109,7 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { formatearFecha } from "../helpers/formatearFecha";
 import { useReporteStore } from "../stores/reportes";
-
+import { useEvidenciasStore } from "../stores/evidencias";
 import { useDepartamentosStore } from "../stores/departamentos";
 
 export default {
@@ -123,15 +123,28 @@ export default {
     const model = ref({});
     const abrirModalEvidencias = ref(false);
 
+    const useEvidencia = useEvidenciasStore();
+    const { guardarImagen } = useEvidencia;
+    const { cargaEvidencia } = storeToRefs(useEvidencia);
+
     const abrir = () => {
       console.log("DESDE EL MODAL EVALUACION");
       model.value = departamentos.value[0];
       abrirModalEvidencias.value = true;
     };
 
+    const modelArchivo = ref(null);
+
     onMounted(() => {});
 
-    const guardarEvidencia = () => {};
+    const enviarEvidencia = (file) => {
+      // console.log(modelArchivo);
+      // console.log(file);
+      var bodyFormData = new FormData();
+      bodyFormData.append("image", file);
+      guardarImagen(bodyFormData);
+    };
+
     const filtrarEvaluacion = (nombre) =>
       evaluacion.value.filter((criterio) => criterio.nombre_s === nombre);
 
@@ -150,8 +163,8 @@ export default {
       model,
       cumpleModel: ref(null),
       finalizarEvaluacion,
-      guardarEvidencia,
-      modelArchivo: ref(null),
+      enviarEvidencia,
+      modelArchivo,
     };
   },
 };

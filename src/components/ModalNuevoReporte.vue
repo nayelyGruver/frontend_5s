@@ -9,13 +9,15 @@
       <q-card-section>
         <q-form @submit.prevent="guardarReporte">
           <div class="q-my-md" style="max-width: 300px">
-            <label>Empresa</label>
+            <label>Sucursal</label>
+            <!-- TODO:AGREGAR CHECKBOX DE EMPRESA -->
             <q-select
-              filled
+              outlined
+              :disable="disableSelectSucursal"
               v-model="modelEmpresa"
               :options="empresas"
               option-label="nombre"
-              label="Empresa"
+              label="Sucursal"
             >
               <template v-slot:selected>
                 <q-chip color="white" text-color="primary" class="q-ma-none">
@@ -23,34 +25,47 @@
                 </q-chip>
               </template>
             </q-select>
-          </div>
-          <div class="q-my-md in">
-            <label>Fecha</label>
-            <div class="q-pa-md" style="max-width: 300px">
-              <q-input filled v-model="date" mask="date" :rules="['date']">
-                <template v-slot:append>
-                  <q-icon name="event" class="cursor-pointer">
-                    <q-popup-proxy
-                      cover
-                      transition-show="scale"
-                      transition-hide="scale"
-                    >
-                      <q-date v-model="date">
-                        <div class="row items-center justify-end">
-                          <q-btn
-                            v-close-popup
-                            label="Close"
-                            color="primary"
-                            flat
-                          />
-                        </div>
-                      </q-date>
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
+            <div class="">
+              <q-checkbox
+                class="text-h5"
+                v-model="modelCheck"
+                label="Seleccionar otra sucursal"
+                @click="habilitarSelectSucursal"
+              />
             </div>
           </div>
+
+          <div class="q-py-md" style="max-width: 300px">
+            <label>Fecha</label>
+            <q-input
+              outlined
+              v-model="modelFecha"
+              mask="date"
+              :rules="['modelFecha']"
+            >
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date v-model="modelFecha">
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Close"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+
           <q-card-actions align="right">
             <q-btn
               icon-right="close"
@@ -105,7 +120,7 @@ export default {
     const submitting = ref(false);
     const model = ref({ id_departamento: "", nombre: "" });
     const abrirModalEvaluacionRef = ref(null);
- 
+
     const useEvaluacion = useEvaluacionStore();
     const { obtenerEvaluacion } = useEvaluacion;
     const { evaluacion } = storeToRefs(useEvaluacion);
@@ -113,14 +128,24 @@ export default {
     const { obtenerDepartamentos } = useDepartamento;
     const { departamentos } = storeToRefs(useDepartamento);
 
+    const disableSelectSucursal = ref(true);
+    const modelCheck = ref(false);
+    const modelFecha = ref("2022/09/22");
+    const modelEmpresa = ref({ id_empresa: 10, nombre: "GRUVER" });
+
     let reporteObj = reactive({
       usuario: "nperez",
       empresa: "GRUVER",
       id_empresa: 10,
-      fecha: "2022/09/15",
+      fecha: modelFecha.value,
     });
 
     const guardarReporte = () => {
+      console.log("VALOR DE MODEL FECHA", modelFecha.value);
+      console.log("VALOR DEL MODEL EMPRESA ", modelEmpresa.value);
+      reporteObj.empresa = modelEmpresa.value.nombre;
+      reporteObj.id_empresa = modelEmpresa.value.id_empresa;
+      reporteObj.fecha = modelFecha.value;
       submitting.value = true;
       //Iserta el nuevo reporte y carga en el state reporte nuevo e Inserción masiva de evaluación de criterios
       reporte.value = insertarReporte(reporteObj);
@@ -141,6 +166,11 @@ export default {
       //abrir nuevo modal
       console.log("ANTES DE ABRIR EL MODAL");
     };
+    const habilitarSelectSucursal = () => {
+      modelCheck.value
+        ? (disableSelectSucursal.value = false)
+        : (disableSelectSucursal.value = true);
+    };
 
     const abrirModal = ref(false);
     const abrir = () => {
@@ -153,12 +183,15 @@ export default {
       abrir,
       abrirModal,
       abrirModalEvaluacionRef,
-      modelEmpresa: ref({ id_empresa: 10, nombre: "GRUVER" }),
-      date: ref("2022/09/15"),
+      modelEmpresa,
       empresas,
       reporteObj,
       guardarReporte,
       submitting,
+      disableSelectSucursal,
+      habilitarSelectSucursal,
+      modelCheck,
+      modelFecha,
     };
   },
 };

@@ -16,6 +16,7 @@
       <q-separator color="primary" class="q-my-md" inset />
       <div class="q-pa-md">
         <q-table
+          class="q-my-md"
           :rows="reportes"
           :columns="columns"
           row-key="id_reporte"
@@ -152,7 +153,8 @@ export default {
         name: "calificacion",
         label: "Calificación Obtenida",
         align: "left",
-        field: "calificacion",
+        field: (row) =>
+          row?.calificacion ? row.calificacion : "No calificado",
         sortable: true,
       },
       {

@@ -12,24 +12,19 @@
           <q-space />
         </q-card-section>
         <q-card-section>
-          <q-form
-            @submit.prevent="enviarEvidencia(modelArchivo, model, modelArea)"
-          >
+          <q-form @submit.prevent="enviarEvidencia(modelArchivo)">
             <div class="q-my-md in">
               <label>Departamento</label>
               <q-select
-                filled
-                v-model="model"
+                outlined
+                v-model="modelDepartamento"
                 :options="departamentos"
                 option-label="nombre"
                 label="Departamento"
-                @update:model-value="
-                  obtenerEvaluacion(reporte.id_reporte, model.id_departamento)
-                "
               >
                 <template v-slot:selected>
                   <q-chip color="white" text-color="primary" class="q-ma-none">
-                    {{ model?.nombre }}
+                    {{ modelDepartamento?.nombre }}
                   </q-chip>
                 </template>
               </q-select>
@@ -43,7 +38,7 @@
                 label-color="primary"
                 lazy-rules
                 v-model="modelArchivo"
-                label="Imagen"
+                label="Selecciona una imagen"
                 accept=".jpg, image/*"
               >
                 <template v-slot:append>
@@ -53,16 +48,13 @@
             </div>
             <div class="q-my-md">
               <div class="q-my-md" style="">
-                <label>Area de clasificacion</label>
+                <label>Área de Clasificación</label>
                 <q-select
-                  filled
+                  outlined
                   v-model="modelArea"
-                  :options="departamentos"
+                  :options="areas"
                   option-label="nombre"
                   label="Area"
-                  @update:model-value="
-                    obtenerEvaluacion(reporte.id_reporte, model.id_departamento)
-                  "
                 >
                   <template v-slot:selected>
                     <q-chip
@@ -76,8 +68,9 @@
                 </q-select>
               </div>
             </div>
-            <div class="q-pa-md q-gutter-sm row justify-end">
+            <div class="q-pa-md q-gutter-sm row justify-start">
               <q-img
+                v-if="evidenciaCargada"
                 :src="evidenciaCargada?.url"
                 loading="lazy"
                 spinner-color="white"
@@ -87,10 +80,16 @@
             </div>
             <q-card-actions align="left">
               <q-btn
+                v-if="
+                  modelArchivo != null &&
+                  modelArea != null &&
+                  modelDepartamento != null
+                "
                 icon-right="save"
                 type="submit"
                 label="Guardar imagen"
                 color="primary"
+                :loading="submitting"
               >
                 <template v-slot:loading>
                   <q-spinner-facebook />
@@ -123,6 +122,7 @@ import { formatearFecha } from "../helpers/formatearFecha";
 import { useReporteStore } from "../stores/reportes";
 import { useEvidenciasStore } from "../stores/evidencias";
 import { useDepartamentosStore } from "../stores/departamentos";
+import { useAreasStore } from "../stores/areas";
 
 export default {
   setup() {
@@ -132,40 +132,49 @@ export default {
     const useDepartamento = useDepartamentosStore();
     const { departamentos } = storeToRefs(useDepartamento);
 
-    const model = ref({});
-    const abrirModalEvidencias = ref(false);
-
     const useEvidencia = useEvidenciasStore();
     const { guardarImagen, guardarReferenciaImagen } = useEvidencia;
     const { evidenciaCargada } = storeToRefs(useEvidencia);
-    const bodyFormData = new FormData();
+
+    const useAreas = useAreasStore();
+    const { obtenerAreas } = useAreas;
+    const { areas } = storeToRefs(useAreas);
+
+    const modelArchivo = ref(null);
+    const modelDepartamento = ref(departamentos.value[0]);
+    const modelArea = ref({ id_area: 1, nombre: "AREA EN BUENAS CONDICIONES" });
+    const abrirModalEvidencias = ref(false);
+    const submitting = ref(false);
 
     const abrir = () => {
       console.log("DESDE EL MODAL EVIDENCIAS");
-      model.value = departamentos.value[0];
       abrirModalEvidencias.value = true;
     };
 
-    const modelArchivo = ref(null);
+    onMounted(() => {
+      obtenerAreas();
+    });
 
-    onMounted(() => {});
-
-    const enviarEvidencia = (file, modelDepto, modelAre) => {
+    const enviarEvidencia = (file) => {
+      submitting.value = true;
+      const bodyFormData = new FormData();
       bodyFormData.append("image", file);
       guardarImagen(bodyFormData).then(() => {
         console.log(evidenciaCargada.value?.url);
         const evidencia = {
           url_imagen: evidenciaCargada.value?.url,
           id_reporte: reporte.value.id_reporte,
-          id_departamento: modelDepto.id_departamento,
-          id_area: modelAre.id_area,
+          id_departamento: modelDepartamento.value.id_departamento,
+          id_area: modelArea.value.id_area,
         };
         guardarReferenciaImagen(evidencia);
       });
+      setTimeout(() => {
+        modelArchivo.value = null;
+        evidenciaCargada.value = null;
+        submitting.value = false;
+      }, 3000);
     };
-
-    const filtrarEvaluacion = (nombre) =>
-      evaluacion.value.filter((criterio) => criterio.nombre_s === nombre);
 
     const finalizarEvaluacion = () => {
       console.log("FINALIZANDO EVALUACION");
@@ -174,18 +183,21 @@ export default {
 
     return {
       abrir,
-      abrirModalEvidencias,
-      filtrarEvaluacion,
-      departamentos,
-      reporte,
       formatearFecha,
-      model,
-      cumpleModel: ref(null),
+      submitting,
+      abrirModalEvidencias,
+
       finalizarEvaluacion,
       evidenciaCargada,
       enviarEvidencia,
+
+      departamentos,
+      reporte,
+      areas,
+
+      modelDepartamento,
       modelArchivo,
-      modelArea: ref({ id_area: 1, nombre: "Area en buenas condiciones" }),
+      modelArea,
     };
   },
 };

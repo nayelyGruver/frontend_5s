@@ -12,7 +12,7 @@
 
           <div class="justify-end">
             <q-select
-              filled
+              outlined
               v-model="model"
               :options="departamentos"
               option-label="nombre"
@@ -32,6 +32,7 @@
         <q-separator color="primary" class="" inset />
         <div class="q-pa-md">
           <q-table
+            class="q-my-sm"
             v-for="({ nombre }, index) in lista_s"
             v-bind:key="index"
             :columns="columns"
@@ -47,7 +48,7 @@
                   label=""
                   color="negative"
                 >
-                  <q-tooltip> Agregar Observación </q-tooltip>
+                  <q-tooltip> - {{ props.row.puntos }}pts </q-tooltip>
                 </q-btn>
                 <q-btn
                   @click="puntuarCumple(props.row.id_evaluacion, props.class)"
@@ -55,7 +56,9 @@
                   round
                   label=""
                   color="positive"
-                />
+                >
+                  <q-tooltip> + {{ props.row.puntos }}pts </q-tooltip>
+                </q-btn>
               </q-td>
             </template>
             <template v-slot:body-cell-acciones="props">
@@ -86,6 +89,7 @@
               label="SUBIR EVIDENCIAS"
               color="primary"
               @click="subirEvidencias()"
+              icon-right="file_upload"
             />
           </q-card-actions>
         </q-card>

@@ -23,7 +23,7 @@ export const useEvidenciasStore = defineStore("evidencias", () => {
       console.log("DESDE guardar referencia a imagen" , evidenciaObj)
         try {
             const { data } = await api.post(`/evidencia`, evidenciaObj)
-            // evidencia.value = data
+            evidencia.value = data
         } catch(error){
             console.log(error)
         }

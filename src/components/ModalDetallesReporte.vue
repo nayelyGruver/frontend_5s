@@ -1,71 +1,84 @@
 <template>
-  <div>
-    <q-dialog v-model="abrirModal" full-width>
-      <q-page-container class="bg-white text-dark">
-        <div class="q-px-lg">
-          <div class="row items-baseline justify-between">
-            <h2 class="text-dark">
-              Detalles Reporte de Evaluación 5'S - {{ reporte.empresa }} -
-              {{ formatearFecha(reporte.fecha) }}
-            </h2>
+  <q-dialog v-model="abrirModal" full-width>
+    <q-page-container class="bg-white text-dark">
+      <!-- TODO:  Boton de cerrar en la esquina-->
+      <div class="q-px-lg">
+        <div class="row items-baseline justify-between">
+          <h2 class="text-dark">
+            Detalles Reporte de Evaluación 5'S - {{ reporte.empresa }} -
+            {{ formatearFecha(reporte.fecha) }}
+          </h2>
+        </div>
+        <div class="justify-end">
+          <div class="">
+            <!-- TODO:  LA CALIFICACIÓN ES POR DEPARTAMENTO-->
             <p>Calificación: {{ reporte.calificacion }}/100</p>
-          </div>
-          <div class="justify-end">
             <q-select
-              filled
-              v-model="model"
+              outlined
+              v-model="modelDepartamento"
               :options="departamentos"
               option-label="nombre"
               label="Departamento"
               @update:model-value="
-                obtenerEvaluacion(reporte.id_reporte, model.id_departamento)
+                obtenerEvaluacion(
+                  reporte.id_reporte,
+                  modelDepartamento.id_departamento
+                )
               "
             >
               <template v-slot:selected>
                 <q-chip color="white" text-color="primary" class="q-ma-none">
-                  {{ model?.nombre }}
+                  {{ modelDepartamento?.nombre }}
                 </q-chip>
               </template>
             </q-select>
           </div>
         </div>
-        <q-separator color="primary" class="" inset />
-        <div class="q-pa-md">
-          <q-table
-            v-for="({ nombre }, index) in lista_s"
-            v-bind:key="index"
-            :columns="columns"
-            :rows="filtrarEvaluacion(nombre)"
-            hide-bottom
-            :rows-per-page-options="[0]"
-          >
-            <template v-slot:header>
-              <q-tr class="table-header">
-                <q-th colspan="2">{{ index + 1 }}S.{{ nombre }} </q-th>
-                <q-th colspan="1">Puntos</q-th>
-                <q-th colspan="1">Puntos Obtenidos</q-th>
-                <q-th colspan="1">Observaciones</q-th>
-              </q-tr>
-            </template>
-          </q-table>
-        </div>
-        <q-card>
-          <q-card-actions align="right">
-            <q-btn
-              flat
-              label="Ver evidencias"
-              color="primary"
-              @click="verEvidencias()"
-            />
-            <q-btn flat label="Cerrar" color="primary" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-page-container>
-      <ModalDetalleEvidencia
-        ref="abrirModalDetalleEvidenciaRef"
-      ></ModalDetalleEvidencia>
-    </q-dialog>
-  </div>
+      </div>
+      <q-separator color="primary" class="" inset />
+      <div class="q-pa-md">
+        <q-table
+          class="q-my-sm"
+          v-for="({ nombre }, index) in lista_s"
+          v-bind:key="index"
+          :columns="columns"
+          :rows="filtrarEvaluacion(nombre)"
+          hide-bottom
+          :rows-per-page-options="[0]"
+        >
+          <template v-slot:header>
+            <q-tr class="table-header">
+              <q-th colspan="2">{{ index + 1 }}S.{{ nombre }} </q-th>
+              <q-th colspan="1">Puntos</q-th>
+              <q-th colspan="1">Puntos Obtenidos</q-th>
+              <q-th colspan="1">Observaciones</q-th>
+            </q-tr>
+          </template>
+        </q-table>
+      </div>
+      <q-card>
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            icon-right="visibility"
+            label="Ver evidencias"
+            color="primary"
+            @click="verEvidencias()"
+          />
+          <q-btn
+            flat
+            icon-right="close"
+            label="Cerrar"
+            color="primary"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-page-container>
+    <ModalDetalleEvidencia
+      ref="abrirModalDetalleEvidenciaRef"
+    ></ModalDetalleEvidencia>
+  </q-dialog>
 </template>
 
 <script>
@@ -95,20 +108,19 @@ export default {
     const { reporte } = storeToRefs(useReporte);
 
     const useDepartamento = useDepartamentosStore();
-
     const { departamentos } = storeToRefs(useDepartamento);
 
     const useEvidencias = useEvidenciasStore();
     const { cargarEvidencias } = useEvidencias;
     const { evidencias } = storeToRefs(useEvidencias);
-    const model = ref({});
+    const modelDepartamento = ref({});
 
     const abrirModalDetalleEvidenciaRef = ref(null);
 
     onMounted(() => {});
 
     const abrir = () => {
-      model.value = departamentos.value[0];
+      modelDepartamento.value = departamentos.value[0];
       abrirModal.value = true;
     };
 
@@ -146,7 +158,7 @@ export default {
         align: "left",
         sortable: true,
         field: "descripcion",
-        style: "white-space: unset !important; width: 55%",
+        style: "white-space: unset !important; width: 60%",
       },
       {
         name: "puntos",
@@ -170,7 +182,7 @@ export default {
         align: "left",
         field: "observaciones",
         sortable: false,
-        style: "white-space: unset !important; width: 25%",
+        style: "white-space: unset !important; width: 20%",
       },
     ];
 
@@ -185,33 +197,13 @@ export default {
       departamentos,
       reporte,
       formatearFecha,
-      // model: ref({ id_departamento: 21, nombre: "ACONDICIONAMIENTO" }),
-      // model: ref(departamentos.value[0]),
-      model,
+      modelDepartamento,
       verEvidencias,
       abrirModalDetalleEvidenciaRef,
     };
   },
-  // watch: {
-  //   model(nuevoValor, viejoValor) {
-  //     console.log("Nuevo valor", nuevoValor);
-  //     console.log("Viejo valor", viejoValor);
-  //     console.log(nuevoValor.id_departamento);
-  //     this.recargarEvaluacion(this.reporte?.value.id_reporte, nuevoValor);
-  //     // obtenerEvaluacion(reporte.value.id_reporte, nuevoValor.id_departamento);
-  //   },
-  // },
-  // methods: {
-  //   async recargarEvaluacion(id_reporte, nuevoValor) {
-  //     this.obtenerEvaluacion(id_reporte, nuevoValor.id_departamento);
-  //   },
-  // },
 };
 </script>
 
-<style scoped>
-/* .descripcion-reporte {
-  border: 1px solid blue;
-  max-width: 50px !important;
-} */
+<style >
 </style>

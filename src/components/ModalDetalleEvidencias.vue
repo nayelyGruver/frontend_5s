@@ -3,22 +3,20 @@
     <q-dialog v-model="abrirModalDetalleEvidencias">
       <q-card class="">
         <q-card-section
-          class="bg-primary text-white row items-center q-pb-none"
+          class="bg-primary text-white row items-center q-py-none"
         >
           <h2 class="">
             Evidencias 5'S - {{ reporte.empresa }} -
             {{ formatearFecha(reporte.fecha) }}
           </h2>
-          <q-space />
         </q-card-section>
         <q-card-section>
           <q-form
             @submit.prevent="enviarEvidencia(modelArchivo, model, modelArea)"
           >
-            <div class="q-my-md in">
-              <label>Departamento</label>
+            <div class="">
               <q-select
-                filled
+                outlined
                 v-model="model"
                 :options="departamentos"
                 option-label="nombre"
@@ -39,61 +37,78 @@
         <q-card-section>
           <!-- TODO: FALTA QUE FILTE LAS IMAGENES POR AREA DE OPORTUNIDAD Y POR DEPARTAMENTO -->
           <!-- TODO: PONER UNA LEYENDA DE QUE NO HAY EVIDENCIAS EN ESTA ÁREA PARA LAS QUE NO TIENEN FOTO -->
-          <q-tree
-            :nodes="buenas"
-            node-key="label"
-            no-connectors
-            v-model:expanded="buenas"
+          <q-item>
+            <q-item-section avatar>
+              <q-avatar>
+                <q-icon name="done" />
+              </q-avatar>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-h4"
+                >Areas en Buenas Condiciones</q-item-label
+              >
+            </q-item-section>
+          </q-item>
+          <q-img
+            v-for="evidencia in filtrarEvidencia(1)"
+            :key="evidencia.id_evidencia"
+            class="q-ma-sm"
+            :src="evidencia.path_foto"
+            loading="lazy"
+            spinner-color="white"
+            height="140px"
+            style="max-width: 150px"
           />
-          <div class="row">
-            <q-img
-              v-for="evidencia in evidencias"
-              :key="evidencia.id_evidencia"
-              class="q-mx-sm"
-              :src="evidencia.path_foto"
-              loading="lazy"
-              spinner-color="white"
-              height="140px"
-              style="max-width: 150px"
-            />
-          </div>
-
-          <q-tree
-            :nodes="oportunidad"
-            node-key="label"
-            no-connectors
-            v-model:expanded="oportunidad"
+        </q-card-section>
+        <q-card-section>
+          <!-- TODO: FALTA QUE FILTE LAS IMAGENES POR AREA DE OPORTUNIDAD Y POR DEPARTAMENTO -->
+          <!-- TODO: PONER UNA LEYENDA DE QUE NO HAY EVIDENCIAS EN ESTA ÁREA PARA LAS QUE NO TIENEN FOTO -->
+          <q-item>
+            <q-item-section avatar>
+              <q-avatar>
+                <q-icon name="close" />
+              </q-avatar>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-h4">Areas de Oportunidad</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-img
+            v-for="evidencia in filtrarEvidencia(2)"
+            :key="evidencia.id_evidencia"
+            class="q-ma-sm"
+            :src="evidencia.path_foto"
+            loading="lazy"
+            spinner-color="white"
+            height="140px"
+            style="max-width: 150px"
           />
-          <div class="row">
-            <q-img
-              v-for="evidencia in evidencias"
-              :key="evidencia.id_evidencia"
-              class="q-mx-sm"
-              :src="evidencia.path_foto"
-              loading="lazy"
-              spinner-color="white"
-              height="140px"
-              style="max-width: 150px"
-            />
-          </div>
-          <q-tree
-            :nodes="mantenimiento"
-            node-key="label"
-            no-connectors
-            v-model:expanded="mantenimiento"
+        </q-card-section>
+        <q-card-section>
+          <!-- TODO: FALTA QUE FILTE LAS IMAGENES POR AREA DE OPORTUNIDAD Y POR DEPARTAMENTO -->
+          <!-- TODO: PONER UNA LEYENDA DE QUE NO HAY EVIDENCIAS EN ESTA ÁREA PARA LAS QUE NO TIENEN FOTO -->
+          <q-item>
+            <q-item-section avatar>
+              <q-avatar>
+                <q-icon name="construction" />
+              </q-avatar>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-h4"
+                >Areas para Mantenimiento</q-item-label
+              >
+            </q-item-section>
+          </q-item>
+          <q-img
+            v-for="evidencia in filtrarEvidencia(3)"
+            :key="evidencia.id_evidencia"
+            class="q-ma-sm"
+            :src="evidencia.path_foto"
+            loading="lazy"
+            spinner-color="white"
+            height="140px"
+            style="max-width: 150px"
           />
-          <div class="row">
-            <q-img
-              v-for="evidencia in evidencias"
-              :key="evidencia.id_evidencia"
-              class="q-mx-sm"
-              :src="evidencia.path_foto"
-              loading="lazy"
-              spinner-color="white"
-              height="140px"
-              style="max-width: 150px"
-            />
-          </div>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn
@@ -139,25 +154,16 @@ export default {
       model.value = departamentos.value[0];
       abrirModalDetalleEvidencias.value = true;
     };
-    const evidencia = ref(null);
 
     const modelArchivo = ref(null);
 
     onMounted(() => {});
 
     const enviarEvidencia = (file, modelDepto, modelAre) => {
-      // console.log(modelArchivo);
-      // console.log(file);
       var bodyFormData = new FormData();
       bodyFormData.append("image", file);
       guardarImagen(bodyFormData).then(() => {
         console.log(evidenciaCargada);
-        // evidencia.value = {
-        //   url_imagen: evidenciaCargada.value.url,
-        //   id_reporte: reporte.value.id_reporte,
-        //   id_departamento: modelDepto.id_departamento,
-        //   id_area: modelAre.id_area,
-        // };
         guardarReferenciaImagen({
           url_imagen: evidenciaCargada.value.url,
           id_reporte: reporte.value.id_reporte,
@@ -167,8 +173,8 @@ export default {
       });
     };
 
-    const filtrarEvaluacion = (nombre) =>
-      evaluacion.value.filter((criterio) => criterio.nombre_s === nombre);
+    const filtrarEvidencia = (id_area) =>
+      evidencias.value.filter((evidencia) => evidencia.id_area === id_area);
 
     const finalizarEvaluacion = () => {
       console.log("FINALIZANDO EVALUACION");
@@ -178,7 +184,7 @@ export default {
     return {
       abrir,
       abrirModalDetalleEvidencias,
-      filtrarEvaluacion,
+      filtrarEvidencia,
       departamentos,
       reporte,
       formatearFecha,

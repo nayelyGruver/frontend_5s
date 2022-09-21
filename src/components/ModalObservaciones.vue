@@ -32,9 +32,8 @@
               color="primary"
               :loading="submitting"
               :disabled="isDisabled"
-
             >
-            <!-- TODO: QUE EL BOTON SE VUELVA A HABILIAR CUANDO SE ABRA OTRA VEZ -->
+              <!-- TODO: QUE EL BOTON SE VUELVA A HABILIAR CUANDO SE ABRA OTRA VEZ -->
               <template v-slot:loading>
                 <q-spinner-facebook />
               </template>
@@ -76,7 +75,6 @@ export default {
       criterioEvaluacion.value.observaciones = observaciones;
       agregarObservacionCriterio(criterioEvaluacion).then(() => {
         submitting.value = false;
-        abrirModalObservaciones.value = false;
         //TODO: MENSAJE QUE AVISE QUE YA SE INSERTO LA OBSERVACION CORRECTAMENTE
       });
     };

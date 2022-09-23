@@ -91,6 +91,14 @@
               @click="subirEvidencias()"
               icon-right="file_upload"
             />
+            <q-btn
+              v-if="botonTerminarEvaluacion"
+              flat
+              label="TERMINAR EVALUACIÓN"
+              color="primary"
+              @click="calcularCalificacion()"
+              icon-right="close"
+            />
           </q-card-actions>
         </q-card>
       </q-page-container>
@@ -126,9 +134,11 @@ export default {
     const { evaluacion } = storeToRefs(useEvaluacion);
 
     const useReporte = useReporteStore();
-    const { obtenerReporteId } = useReporte;
+    const { obtenerReporteId, guardarCalificacionReporte, obtenerReportes } =
+      useReporte;
     const { reporte } = storeToRefs(useReporte);
     const abrirModalEvidenciasRef = ref(null);
+    const botonTerminarEvaluacion = ref(false);
 
     const useDepartamento = useDepartamentosStore();
 
@@ -165,10 +175,16 @@ export default {
       });
       console.log("Puntuar No Cumple", id_evaluacion);
     };
-
+    const calcularCalificacion = () => {
+      console.log("CALCULANDO CALIFICACION");
+      abrirModalEvaluacion.value = false;
+      guardarCalificacionReporte(reporte.value);
+      // obtenerReportes(); //<-----------Obtener Reportes esto se debe quitar pero lo reviso TODO:
+    };
     const subirEvidencias = () => {
       console.log("en subir evidencias");
       abrirModalEvidenciasRef.value.abrir(true);
+      botonTerminarEvaluacion.value = true;
     };
     const lista_s = [
       { nombre: "clasificar" },
@@ -231,6 +247,8 @@ export default {
       subirEvidencias,
       abrirModalObservacionesRef,
       abrirModalEvidenciasRef,
+      botonTerminarEvaluacion,
+      calcularCalificacion,
     };
   },
 };

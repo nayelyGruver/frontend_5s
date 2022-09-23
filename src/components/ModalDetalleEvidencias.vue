@@ -22,7 +22,7 @@
                 option-label="nombre"
                 label="Departamento"
                 @update:model-value="
-                  obtenerEvaluacion(reporte.id_reporte, model.id_departamento)
+                  cargarEvidencias(reporte.id_reporte, model.id_departamento)
                 "
               >
                 <template v-slot:selected>
@@ -146,7 +146,8 @@ export default {
     const abrirModalDetalleEvidencias = ref(false);
 
     const useEvidencia = useEvidenciasStore();
-    const { guardarImagen, guardarReferenciaImagen } = useEvidencia;
+    const { guardarImagen, guardarReferenciaImagen, cargarEvidencias } =
+      useEvidencia;
     const { evidencias, evidenciaCargada } = storeToRefs(useEvidencia);
 
     const abrir = () => {
@@ -195,7 +196,7 @@ export default {
       enviarEvidencia,
       modelArchivo,
       modelArea: ref({ id_area: 1, nombre: "Area en buenas condiciones" }),
-
+      cargarEvidencias,
       expanded: ref(["Areas de clasificación", "dashboard"]),
 
       buenas: [

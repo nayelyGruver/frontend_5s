@@ -29,13 +29,12 @@ export const useEvidenciasStore = defineStore("evidencias", () => {
         }
     }
 
-    const cargarEvidencias = async (reporte, departamento) => {
-      console.log("DESDE cargar Evidencias REPORTE",  reporte)
-      console.log("DESDE cargar Evidencias DEPARTAMENTO",  departamento)
-      const idReporte = reporte.id_reporte
-      const idDepartamento = departamento.id_departamento
+    const cargarEvidencias = async (id_reporte, id_departamento) => {
+      console.log("DESDE cargar Evidencias REPORTE",  id_reporte)
+      console.log("DESDE cargar Evidencias DEPARTAMENTO",  id_departamento)
+
         try {
-            const { data } = await api.get(`/evidencias/${idReporte}/${idDepartamento}` )
+            const { data } = await api.get(`/evidencias/${id_reporte}/${id_departamento}` )
             evidencias.value = [...data]
             console.log(evidencias.value)
         } catch(error){

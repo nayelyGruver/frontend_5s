@@ -38,6 +38,14 @@
           </template>
           <template v-slot:body-cell-acciones="props">
             <q-td>
+              <!-- <q-btn
+                @click="descargarReporte(departamentos)"
+                flat
+                color="dark"
+                icon="file_download"
+              >
+                <q-tooltip> Descargar Reporte </q-tooltip>
+              </q-btn> -->
               <q-btn
                 @click="verDetallesReportes(props.row.id_reporte)"
                 flat
@@ -46,6 +54,7 @@
               >
                 <q-tooltip> Ver Detalles </q-tooltip>
               </q-btn>
+
               <q-btn
                 @click="confirmarEliminarReporte(props.row.id_reporte)"
                 flat
@@ -91,6 +100,7 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 
 import { formatearFecha } from "../helpers/formatearFecha";
+import { generarPDF } from "../helpers/generarPDF";
 import ModalDetallesReporte from "../components/ModalDetallesReporte.vue";
 import ModalNuevoReporte from "../components/ModalNuevoReporte.vue";
 
@@ -188,6 +198,11 @@ export default {
       confirm.value = true;
     };
 
+    const descargarReporte = (departamentos) => {
+      console.log("DESCARGAR REPORTE");
+      console.log(departamentos);
+      generarPDF();
+    };
     return {
       columns,
       reportes,
@@ -200,6 +215,7 @@ export default {
       eliminarReporte,
       modalNuevoReporte,
       crearNuevoReporte,
+      descargarReporte,
     };
   },
 };

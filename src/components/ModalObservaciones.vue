@@ -31,7 +31,7 @@
               label="Guardar"
               color="primary"
               :loading="submitting"
-              :disabled="isDisabled"
+              v-close-popup
             >
               <!-- TODO: QUE EL BOTON SE VUELVA A HABILIAR CUANDO SE ABRA OTRA VEZ -->
               <template v-slot:loading>

@@ -12,7 +12,7 @@
         <div class="justify-end">
           <div class="">
             <!-- TODO:  LA CALIFICACIÓN ES POR DEPARTAMENTO-->
-            <p>Calificación: {{ reporte.calificacion }}/100</p>
+            <p>Calificación: {{ calificacionDepartamento.calificacion }}/100</p>
             <q-select
               outlined
               v-model="modelDepartamento"
@@ -20,12 +20,13 @@
               option-label="nombre"
               label="Departamento"
               @update:model-value="
-                obtenerEvaluacion(
+                cambiarDepartamento(
                   reporte.id_reporte,
                   modelDepartamento.id_departamento
                 )
               "
             >
+              <!-- TODO: CAMBIOS ARRIBA -->
               <template v-slot:selected>
                 <q-chip color="white" text-color="primary" class="q-ma-none">
                   {{ modelDepartamento?.nombre }}
@@ -38,6 +39,7 @@
       <q-separator color="primary" class="" inset />
       <div class="q-pa-md">
         <q-table
+          id="tabla"
           class="q-my-sm"
           v-for="({ nombre }, index) in lista_s"
           v-bind:key="index"
@@ -59,6 +61,15 @@
       <q-card>
         <q-card-actions align="right">
           <q-btn
+            @click="descargarReporte(departamentos)"
+            flat
+            label="Descargar Reporte"
+            color="dark"
+            icon="file_download"
+          >
+            <q-tooltip> Descargar Reporte </q-tooltip>
+          </q-btn>
+          <q-btn
             flat
             icon-right="visibility"
             label="Ver evidencias"
@@ -69,7 +80,7 @@
             flat
             icon-right="close"
             label="Cerrar"
-            color="primary"
+            color="negative"
             v-close-popup
           />
         </q-card-actions>
@@ -89,6 +100,8 @@ import { formatearFecha } from "../helpers/formatearFecha";
 import { useEvaluacionStore } from "../stores/evaluacion";
 import { useReporteStore } from "../stores/reportes";
 
+import { generarPDF } from "../helpers/generarPDF";
+
 import { useDepartamentosStore } from "../stores/departamentos";
 import { useEvidenciasStore } from "../stores/evidencias";
 import ModalDetalleEvidencia from "../components/ModalDetalleEvidencias.vue";
@@ -105,7 +118,8 @@ export default {
     const { evaluacion } = storeToRefs(useEvaluacion);
 
     const useReporte = useReporteStore();
-    const { reporte } = storeToRefs(useReporte);
+    const { obtenerCalificacionDepartamento } = useReporte;
+    const { reporte, calificacionDepartamento } = storeToRefs(useReporte);
 
     const useDepartamento = useDepartamentosStore();
     const { departamentos } = storeToRefs(useDepartamento);
@@ -119,17 +133,44 @@ export default {
 
     onMounted(() => {});
 
+    const cambiarDepartamento = (id_reporte, id_departamento) => {
+      //TODO:TRABAJANDO AQUI
+      obtenerCalificacionDepartamento(id_reporte, id_departamento);
+      obtenerEvaluacion(id_reporte, id_departamento);
+    };
+
+    const descargarReporte = (departamentos) => {
+      console.log("DESCARGAR REPORTE");
+      generarPDF(
+        reporte.value.empresa,
+        modelDepartamento.value.nombre,
+        formatearFecha(reporte.value.fecha),
+        calificacionDepartamento.value.calificacion,
+        lista_s,
+        evaluacion.value
+      );
+    };
+
     const abrir = () => {
       modelDepartamento.value = departamentos.value[0];
       abrirModal.value = true;
+      //TODO:TRABAJANDO AQUI
+      obtenerCalificacionDepartamento(
+        reporte.value.id_reporte,
+        departamentos.value[0].id_departamento
+      );
     };
 
     const filtrarEvaluacion = (nombre) =>
       evaluacion.value.filter((criterio) => criterio.nombre_s === nombre);
 
     const verEvidencias = () => {
+      console.log(evaluacion.value);
       console.log("ESTAS EN EL METODO VER EVIDENCIAS");
-      cargarEvidencias(reporte.value, departamentos.value[0]).then(() => {
+      cargarEvidencias(
+        reporte.value.id_reporte,
+        departamentos.value[0].id_departamento
+      ).then(() => {
         console.log(evidencias.value[0]?.path_foto);
         abrirModalDetalleEvidenciaRef.value.abrir(true);
       });
@@ -200,6 +241,9 @@ export default {
       modelDepartamento,
       verEvidencias,
       abrirModalDetalleEvidenciaRef,
+      calificacionDepartamento,
+      cambiarDepartamento,
+      descargarReporte,
     };
   },
 };

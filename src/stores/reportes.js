@@ -5,6 +5,7 @@ import { ref }  from 'vue'
 export const useReporteStore = defineStore("reportes", () => {
     const reportes  = ref ([])
     const reporte = ref(null)
+    const calificacionDepartamento = ref({calificacion: 0})
     const obtenerReportes = async() => {
         try{
             const { data } = await api.get(`/reportes`)
@@ -52,13 +53,40 @@ export const useReporteStore = defineStore("reportes", () => {
       } catch(error){
           console.log(error)
       }
-  }
+    }
+
+    const guardarCalificacionReporte = async (reporteObj) => {
+      try{
+          const {data} = await api.put('/reporteEvaluacion', reporteObj)
+          console.log("DESDE guardarCalificacionReporte---", data[0]?.calificacionMes)
+          // reportes.value.find
+          reportes.value.find( r => r.id_reporte === reporte.value.id_reporte ).calificacion = data[0]?.calificacionMes
+          return data
+      } catch(error){
+          console.log(error)
+      }
+    }
+
+    //TODO: TRABAJANDO EN CALIFICACION DEPARTAMENTO
+    const obtenerCalificacionDepartamento = async (id_reporte, id_departamento) => {
+      try{
+          const {data} = await api.get(`/calificacion/${id_reporte}/${id_departamento}`)
+          calificacionDepartamento.value = data[0]
+          return data
+      } catch(error){
+          console.log(error)
+      }
+    }
+
     return {
         obtenerReportes,
         obtenerReporteId,
         eliminarReporte,
         reportes,
         reporte,
-        insertarReporte
+        insertarReporte,
+        guardarCalificacionReporte,
+        obtenerCalificacionDepartamento,
+        calificacionDepartamento
     }
 })

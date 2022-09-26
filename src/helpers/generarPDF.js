@@ -2,7 +2,7 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
 // Default export is a4 paper, portrait, using millimeters for units
-export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, evaluacion) =>{
+export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, evaluacion, evidencias) =>{
   const doc = new jsPDF();
 
   doc.autoTable({
@@ -14,6 +14,7 @@ export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, e
      {header: "Evaluación 5'S",  dataKey: 'departamento' },
      {header: "",  dataKey: 'fecha' }],
   })
+
   doc.autoTable({
     theme: 'plain',
     styles: { halign: 'center',  fontSize: 13  } ,
@@ -55,6 +56,41 @@ export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, e
     )
   });
 
+
+  // GENERAR HORA PARA EVIDENCIAS
+  const areasEnBuenasCondiciones =  evidencias.filter(evidencia => evidencia.id_area === 1)
+  const areasDeOportunidad =  evidencias.filter(evidencia => evidencia.id_area === 2)
+  const areasParaMantenimiento =  evidencias.filter(evidencia => evidencia.id_area === 3)
+
+  console.log(areasEnBuenasCondiciones)
+  console.log(areasDeOportunidad)
+  console.log(areasParaMantenimiento)
+
+  doc.addPage("a4","p")
+  doc.getFontSize(26)
+  doc.text(90, 20,"Evidencias 5's");
+  doc.getFontSize(12)
+  doc.text(20, 30,"Areas en Buen Estado");
+  let posicionX = 30
+  areasEnBuenasCondiciones.forEach(evidencia => {
+    doc.addImage(evidencia?.path_foto,'jpg', posicionX ,35, 70, 70, evidencia?.path_foto , 'NONE', 0 )
+    posicionX = posicionX + 90
+  })
+
+  doc.text(20, 120,"Areas de Oportunidad");
+  posicionX = 30
+  areasDeOportunidad.forEach(evidencia => {
+    doc.addImage(evidencia?.path_foto,'jpg', posicionX , 125, 70, 70, evidencia?.path_foto, 'NONE', 0 )
+    posicionX = posicionX + 90
+  })
+
+  doc.text(20, 210,"Areas para mantenimiento");
+  posicionX = 30
+  areasParaMantenimiento.forEach(evidencia => {
+    doc.addImage(evidencia?.path_foto,'jpg', posicionX , 215, 70, 70, evidencia?.path_foto, 'NONE', 0 )
+    posicionX = posicionX + 90
+  })
+
   doc.save(`evaluacion_5s_${empresa}_${departamento}_${fecha}.pdf`)
 
 //   var pdf = new jsPDF();
@@ -73,8 +109,42 @@ export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, e
 
 // pdf.save('mipdf.pdf');
 
+}
 
+export const generarEvidenciasPDF = (evidencias) =>{
 
+  console.log(evidencias)
+  const doc = new jsPDF();
+  const areasEnBuenasCondiciones =  evidencias.filter(evidencia => evidencia.id_area == 1)
+  const areasDeOportunidad =  evidencias.filter(evidencia => evidencia.id_area == 2)
+  const areasParaMantenimiento =  evidencias.filter(evidencia => evidencia.id_area == 3)
+
+  doc.addPage("a4","p")
+  doc.getFontSize(26)
+  doc.text(90, 20,"Evidencias 5's");
+  doc.getFontSize(12)
+  doc.text(20, 30,"Areas en Buen Estado");
+  let posicionX = 25
+  areasEnBuenasCondiciones.forEach(evidencia => {
+    doc.addImage(evidencia?.path_foto,'jpg', posicionX ,35, 70, 70, "Imagen", 'NONE', 0 )
+    posicionX = posicionX + 80
+  })
+
+  doc.text(20, 120,"Areas de Oportunidad");
+  posicionX = 25
+  areasDeOportunidad.forEach(evidencia => {
+    doc.addImage(evidencia?.path_foto,'jpg', posicionX , 125, 70, 70, "Imagen", 'NONE', 0 )
+    posicionX = posicionX + 80
+  })
+
+  doc.text(20, 210,"Areas para mantenimiento");
+  posicionX = 25
+  areasParaMantenimiento.forEach(evidencia => {
+    doc.addImage(evidencia?.path_foto,'jpg', posicionX , 215, 70, 70, "Imagen", 'NONE', 0 )
+    posicionX = posicionX + 80
+  })
+
+  doc.save(`evidencias_5s_.pdf`)
 }
 
 

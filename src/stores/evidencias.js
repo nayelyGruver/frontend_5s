@@ -1,4 +1,4 @@
-import { apiUpload } from 'src/boot/axiosUploads'
+// import { apiUpload } from 'src/boot/axiosUploads'
 import { api } from 'src/boot/axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -11,7 +11,7 @@ export const useEvidenciasStore = defineStore("evidencias", () => {
     const guardarImagen = async (bodyFormData) => {
       console.log("DESDE EL STORE EVIDENCIAS" , bodyFormData)
         try {
-            const { data } = await apiUpload.post(`/image`, bodyFormData)
+            const { data } = await api.post(`/image`, bodyFormData)
             evidenciaCargada.value = data
             console.log("EVIDENCIAS DESDE EL STORE", evidenciaCargada.value)
         } catch(error){

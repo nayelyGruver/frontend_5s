@@ -100,7 +100,7 @@ import { formatearFecha } from "../helpers/formatearFecha";
 import { useEvaluacionStore } from "../stores/evaluacion";
 import { useReporteStore } from "../stores/reportes";
 
-import { generarPDF } from "../helpers/generarPDF";
+import { generarPDF, generarEvidenciasPDF } from "../helpers/generarPDF";
 
 import { useDepartamentosStore } from "../stores/departamentos";
 import { useEvidenciasStore } from "../stores/evidencias";
@@ -137,6 +137,7 @@ export default {
       //TODO:TRABAJANDO AQUI
       obtenerCalificacionDepartamento(id_reporte, id_departamento);
       obtenerEvaluacion(id_reporte, id_departamento);
+      cargarEvidencias(id_reporte, id_departamento);
     };
 
     const descargarReporte = (departamentos) => {
@@ -147,8 +148,10 @@ export default {
         formatearFecha(reporte.value.fecha),
         calificacionDepartamento.value.calificacion,
         lista_s,
-        evaluacion.value
+        evaluacion.value,
+        evidencias.value
       );
+      // generarEvidenciasPDF(evidencias.value);
     };
 
     const abrir = () => {
@@ -156,6 +159,11 @@ export default {
       abrirModal.value = true;
       //TODO:TRABAJANDO AQUI
       obtenerCalificacionDepartamento(
+        reporte.value.id_reporte,
+        departamentos.value[0].id_departamento
+      );
+
+      cargarEvidencias(
         reporte.value.id_reporte,
         departamentos.value[0].id_departamento
       );

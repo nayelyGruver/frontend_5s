@@ -29,6 +29,18 @@ export const useEvaluacionStore = defineStore("evaluaciones", () => {
           }
     }
 
+    const puntuarCumpleCriterio = async (evaluacionCriterio, criterio) => {
+      console.log("EVALUACION CRITERIO", evaluacionCriterio)
+          try {
+              const { data } = await api.put(`/evaluacion/cumple`, evaluacionCriterio)
+
+              return data
+              // evaluacion.value = [...data] //<---Reemplazar el valor que habia antes en el array
+          } catch(error){
+              console.log(error)
+          }
+    }
+
     const agregarObservacionCriterio  = async (criterioEvaluacion) => {
       console.log(criterioEvaluacion.value)
           try {
@@ -45,6 +57,6 @@ export const useEvaluacionStore = defineStore("evaluaciones", () => {
           puntuarNoCumpleCriterio,
           agregarObservacionCriterio,
           obtenerCriterioEvaluacion,
-          criterioEvaluacion
+          criterioEvaluacion, puntuarCumpleCriterio
       }
 })

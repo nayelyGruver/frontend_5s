@@ -41,21 +41,24 @@
             :rows-per-page-options="[0]"
             ><template v-slot:body-cell-cumple="props">
               <q-td class="space-around justify-evenly aling-items-center">
+                <!-- <q-checkbox v-model="valChecks[index]" /> -->
                 <q-btn
                   @click="puntuarNoCumple(props.row.id_evaluacion, props.class)"
                   icon="close"
                   round
                   label=""
-                  color="negative"
+                  :color="btnNegativeColor"
                 >
                   <q-tooltip> - {{ props.row.puntos }}pts </q-tooltip>
                 </q-btn>
                 <q-btn
-                  @click="puntuarCumple(props.row.id_evaluacion, props.class)"
+                  @click="
+                    puntuarCumple(props.row.id_evaluacion, props.row.criterio)
+                  "
                   icon="done"
                   round
                   label=""
-                  color="positive"
+                  :color="btnPositiveColor"
                 >
                   <q-tooltip> + {{ props.row.puntos }}pts </q-tooltip>
                 </q-btn>
@@ -128,6 +131,7 @@ export default {
     const useEvaluacion = useEvaluacionStore();
     const {
       obtenerEvaluacion,
+      puntuarCumpleCriterio,
       puntuarNoCumpleCriterio,
       obtenerCriterioEvaluacion,
     } = useEvaluacion;
@@ -136,17 +140,36 @@ export default {
     const useReporte = useReporteStore();
     const { obtenerReporteId, guardarCalificacionReporte, obtenerReportes } =
       useReporte;
-    const { reporte } = storeToRefs(useReporte);
+    const { reporte, listaPuntosCriterios } = storeToRefs(useReporte);
     const abrirModalEvidenciasRef = ref(null);
     const botonTerminarEvaluacion = ref(false);
-
     const useDepartamento = useDepartamentosStore();
-
     const { departamentos } = storeToRefs(useDepartamento);
 
     const model = ref({});
     const abrirModalEvaluacion = ref(false);
     const abrirModalObservacionesRef = ref(null);
+    const valChecks = ref([
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ]);
+    const btnNegativeColor = ref("negative");
+    const btnPositiveColor = ref("positive");
 
     const abrir = () => {
       console.log("DESDE EL MODAL EVALUACION");
@@ -165,10 +188,27 @@ export default {
       abrirModalObservacionesRef.value.abrir(true);
     };
 
-    const puntuarCumple = (id_evaluacion) => {
-      console.log("Puntuar", id_evaluacion);
+    const puntuarCumple = (id_evaluacion, criterio) => {
+      // btnNegativeColor.value = "disableNegative";
+      // console.log(listaPuntosCriterios);
+      // console.log(
+      //   "JEEEEEEEE",
+      //   listaPuntosCriterios.value.filter((c) => c.criterio === criterio)
+      //     ?.puntos
+      // );
+      // listaPuntosCriterios.value.forEach((criterio) =>
+      //   console.log(criterio.puntos)
+      // );
+      // let puntos = listaPuntosCriterios.value.filter(
+      //   (c) => c.criterio == criterio
+      // )?.puntos;
+      // puntuarCumpleCriterio({
+      //   id_evaluacion: id_evaluacion,
+      //   puntos: puntos,
+      // });
     };
     const puntuarNoCumple = (id_evaluacion) => {
+      // btnPositiveColor.value = "disablePositive";
       puntuarNoCumpleCriterio({
         id_evaluacion: id_evaluacion,
         puntos: 0,
@@ -249,6 +289,9 @@ export default {
       abrirModalEvidenciasRef,
       botonTerminarEvaluacion,
       calcularCalificacion,
+      valChecks,
+      btnNegativeColor,
+      btnPositiveColor,
     };
   },
 };

@@ -43,6 +43,7 @@ import { storeToRefs } from "pinia";
 
 import NavBar from "../components/NavBar.vue";
 
+import { useReporteStore } from "../stores/reportes";
 import { useUsuarioStore } from "../stores/usuarios";
 import { useMetricasStore } from "../stores/metricas";
 import { useEmpresasStore } from "../stores/empresas";
@@ -52,6 +53,8 @@ export default {
     NavBar,
   },
   setup() {
+    const useReporte = useReporteStore();
+    const { obtenerReportes } = useReporte;
     const useUsuario = useUsuarioStore();
     const { usuarioAutenticado } = storeToRefs(useUsuario);
     const { obtenerUsuarios } = useUsuario;
@@ -68,6 +71,7 @@ export default {
       obtenerEmpresas();
       obtenerCalificacionMes();
       obtenerCalificacionAnio();
+      obtenerReportes();
     });
 
     const inicialesUsuario = (nombre) =>

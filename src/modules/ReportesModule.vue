@@ -38,14 +38,6 @@
           </template>
           <template v-slot:body-cell-acciones="props">
             <q-td>
-              <!-- <q-btn
-                @click="descargarReporte(departamentos)"
-                flat
-                color="dark"
-                icon="file_download"
-              >
-                <q-tooltip> Descargar Reporte </q-tooltip>
-              </q-btn> -->
               <q-btn
                 @click="verDetallesReportes(props.row.id_reporte)"
                 flat
@@ -96,7 +88,8 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+// TODO: FILTRADO DE REPORTES POR EMPRESA Y QUE POR DEFECTO EL FILTRADO SEA POR LA EMPRESA DEL USUARIO
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 
 import { formatearFecha } from "../helpers/formatearFecha";
@@ -114,7 +107,7 @@ export default {
   },
   setup() {
     const useReporte = useReporteStore();
-    const { eliminarReporte, obtenerReportes, obtenerReporteId } = useReporte;
+    const { eliminarReporte, obtenerReporteId } = useReporte;
     const { reportes, reporte } = storeToRefs(useReporte);
 
     const useEvaluacion = useEvaluacionStore();
@@ -188,19 +181,11 @@ export default {
       modalNuevoReporte.value.abrir(true);
     };
 
-    onMounted(() => {
-      obtenerReportes();
-    });
-
     const confirmarEliminarReporte = (id) => {
       obtenerReporteId(id);
       confirm.value = true;
     };
 
-    const descargarReporte = (departamentos) => {
-      console.log("DESCARGAR REPORTE");
-      console.log(departamentos);
-    };
     return {
       columns,
       reportes,
@@ -213,7 +198,6 @@ export default {
       eliminarReporte,
       modalNuevoReporte,
       crearNuevoReporte,
-      descargarReporte,
     };
   },
 };

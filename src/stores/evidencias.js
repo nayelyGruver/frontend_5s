@@ -10,10 +10,12 @@ export const useEvidenciasStore = defineStore("evidencias", () => {
 
     const guardarImagen = async (bodyFormData) => {
       console.log("DESDE EL STORE EVIDENCIAS" , bodyFormData)
+      // console.log(bodyFormData)
         try {
             const { data } = await api.post(`/image`, bodyFormData)
+            console.log( data )
             evidenciaCargada.value = data
-            console.log("EVIDENCIAS DESDE EL STORE", evidenciaCargada.value)
+            // console.log("EVIDENCIAS DESDE EL STORE", evidenciaCargada.value)
         } catch(error){
             console.log(error)
         }

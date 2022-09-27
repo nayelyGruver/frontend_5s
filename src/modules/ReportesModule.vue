@@ -100,7 +100,6 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 
 import { formatearFecha } from "../helpers/formatearFecha";
-import { generarPDF, generarEvidenciasPDF } from "../helpers/generarPDF";
 import ModalDetallesReporte from "../components/ModalDetallesReporte.vue";
 import ModalNuevoReporte from "../components/ModalNuevoReporte.vue";
 
@@ -201,8 +200,6 @@ export default {
     const descargarReporte = (departamentos) => {
       console.log("DESCARGAR REPORTE");
       console.log(departamentos);
-      // generarPDF();
-      generarEvidenciasPDF();
     };
     return {
       columns,

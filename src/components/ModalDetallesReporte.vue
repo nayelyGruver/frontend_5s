@@ -100,7 +100,7 @@ import { formatearFecha } from "../helpers/formatearFecha";
 import { useEvaluacionStore } from "../stores/evaluacion";
 import { useReporteStore } from "../stores/reportes";
 
-import { generarPDF, generarEvidenciasPDF } from "../helpers/generarPDF";
+import { generarPDF } from "../helpers/generarPDF";
 
 import { useDepartamentosStore } from "../stores/departamentos";
 import { useEvidenciasStore } from "../stores/evidencias";
@@ -151,7 +151,6 @@ export default {
         evaluacion.value,
         evidencias.value
       );
-      // generarEvidenciasPDF(evidencias.value);
     };
 
     const abrir = () => {

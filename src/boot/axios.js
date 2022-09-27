@@ -8,7 +8,7 @@ import axios from 'axios'
 // "export default () => {}" function below (which runs individually
 // for each client)
 // const api = axios.create({ baseURL: 'https://backend.gruver.com.mx/api' })
-const api = axios.create({ baseURL: 'http://localhost:4000/api' })
+const api = axios.create({ baseURL: 'https://backend.gruver.com.mx/api' })
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 

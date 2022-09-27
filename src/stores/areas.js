@@ -13,6 +13,7 @@ export const useAreasStore = defineStore("areas", () => {
             console.log(error)
         }
     }
+
     return {
         obtenerAreas,
         areas,

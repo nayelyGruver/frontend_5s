@@ -2,9 +2,11 @@ import { api } from 'src/boot/axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useEvaluacionStore = defineStore("evaluaciones", () => {
+export const useEvaluacionStore = defineStore( "evaluaciones", () => {
+
     const evaluacion = ref ([])
     const criterioEvaluacion = ref(null)
+
     const obtenerEvaluacion = async (idReporte="", idDepartamento="") => {
         try {
             const { data } = await api.get(`/evaluacion/${idReporte}/${idDepartamento}`)
@@ -21,7 +23,6 @@ export const useEvaluacionStore = defineStore("evaluaciones", () => {
       console.log(evaluacionCriterio)
           try {
               const { data } = await api.put(`/evaluacion`, evaluacionCriterio)
-
               return data
               // evaluacion.value = [...data] //<---Reemplazar el valor que habia antes en el array
           } catch(error){
@@ -33,7 +34,6 @@ export const useEvaluacionStore = defineStore("evaluaciones", () => {
       console.log("EVALUACION CRITERIO", evaluacionCriterio)
           try {
               const { data } = await api.put(`/evaluacion/cumple`, evaluacionCriterio)
-
               return data
               // evaluacion.value = [...data] //<---Reemplazar el valor que habia antes en el array
           } catch(error){
@@ -57,6 +57,7 @@ export const useEvaluacionStore = defineStore("evaluaciones", () => {
           puntuarNoCumpleCriterio,
           agregarObservacionCriterio,
           obtenerCriterioEvaluacion,
-          criterioEvaluacion, puntuarCumpleCriterio
+          criterioEvaluacion,
+          puntuarCumpleCriterio
       }
 })

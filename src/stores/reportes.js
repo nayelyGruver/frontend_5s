@@ -7,6 +7,7 @@ export const useReporteStore = defineStore("reportes", () => {
     const reporte = ref(null)
     const calificacionDepartamento = ref({calificacion: 0})
     const listaPuntosCriterios = ref([])
+
     const obtenerReportes = async() => {
         try{
             const { data } = await api.get(`/reportes`)
@@ -49,7 +50,6 @@ export const useReporteStore = defineStore("reportes", () => {
     const insercionCriteriosEvaluacion = async (reporteObj) => {
       try{
           const { data } = await api.post('/criterios', reporteObj)
-          console.log("DESDE INSERCION DE CRITERIOS DE EVALUACION", data)
           listaPuntosCriterios.value = [...data] //<----------REVISAR ESTO, NO DEBO TRAERME TODA LALISTA, SOLO QUIERO EL CRITERIO CON SUS PUNTOS
           console.log("lista de puntos criterios", listaPuntosCriterios)
           return data
@@ -61,7 +61,6 @@ export const useReporteStore = defineStore("reportes", () => {
     const guardarCalificacionReporte = async (reporteObj) => {
       try{
           const {data} = await api.put('/reporteEvaluacion', reporteObj)
-          console.log("DESDE guardarCalificacionReporte---", data[0]?.calificacionMes)
           // reportes.value.find
           reportes.value.find( r => r.id_reporte === reporte.value.id_reporte ).calificacion = data[0]?.calificacionMes
           return data
@@ -70,7 +69,6 @@ export const useReporteStore = defineStore("reportes", () => {
       }
     }
 
-    //TODO: TRABAJANDO EN CALIFICACION DEPARTAMENTO
     const obtenerCalificacionDepartamento = async (id_reporte, id_departamento) => {
       try{
           const {data} = await api.get(`/calificacion/${id_reporte}/${id_departamento}`)

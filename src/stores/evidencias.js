@@ -9,20 +9,16 @@ export const useEvidenciasStore = defineStore("evidencias", () => {
     const evidencias = ref([])
 
     const guardarImagen = async (bodyFormData) => {
-      console.log("DESDE EL STORE EVIDENCIAS" , bodyFormData)
-      // console.log(bodyFormData)
         try {
             const { data } = await api.post(`/image`, bodyFormData)
             console.log( data )
             evidenciaCargada.value = data
-            // console.log("EVIDENCIAS DESDE EL STORE", evidenciaCargada.value)
         } catch(error){
             console.log(error)
         }
     }
-    //url foto, idreporte, iddepartamento, id area
+
     const guardarReferenciaImagen = async (evidenciaObj) => {
-      console.log("DESDE guardar referencia a imagen" , evidenciaObj)
         try {
             const { data } = await api.post(`/evidencia`, evidenciaObj)
             evidencia.value = data
@@ -32,9 +28,6 @@ export const useEvidenciasStore = defineStore("evidencias", () => {
     }
 
     const cargarEvidencias = async (id_reporte, id_departamento) => {
-      console.log("DESDE cargar Evidencias REPORTE",  id_reporte)
-      console.log("DESDE cargar Evidencias DEPARTAMENTO",  id_departamento)
-
         try {
             const { data } = await api.get(`/evidencias/${id_reporte}/${id_departamento}` )
             evidencias.value = [...data]

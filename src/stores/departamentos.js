@@ -14,7 +14,6 @@ export const useDepartamentosStore = defineStore("departamentos", () => {
         }
     }
 
-
     return {
         obtenerDepartamentos,
         departamentos,

@@ -4,6 +4,7 @@ import { ref } from 'vue'
 
 export const useEmpresasStore = defineStore("empresas", () => {
     const empresas = ref ([])
+
     const obtenerEmpresas = async () => {
         try {
             const { data } = await api.get(`/empresas`)
@@ -12,8 +13,10 @@ export const useEmpresasStore = defineStore("empresas", () => {
             console.log(error)
         }
     }
+
     return {
         obtenerEmpresas,
         empresas,
     }
+
 })

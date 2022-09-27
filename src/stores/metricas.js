@@ -14,6 +14,7 @@ export const useMetricasStore = defineStore("metricas", () => {
             console.log(error)
         }
     }
+
     const obtenerCalificacionAnio = async () => {
         try {
             const { data } = await api.get(`/metricas/calificacion/anio`)

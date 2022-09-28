@@ -34,19 +34,17 @@
             </div>
           </q-form>
         </q-card-section>
-        <q-card-section>
-          <!-- TODO: FALTA QUE FILTE LAS IMAGENES POR AREA DE OPORTUNIDAD Y POR DEPARTAMENTO -->
-          <!-- TODO: PONER UNA LEYENDA DE QUE NO HAY EVIDENCIAS EN ESTA ÁREA PARA LAS QUE NO TIENEN FOTO -->
-          <q-item>
+        <q-card-section
+          ><q-item>
             <q-item-section avatar>
               <q-avatar>
                 <q-icon name="done" />
               </q-avatar>
             </q-item-section>
             <q-item-section>
-              <q-item-label class="text-h4"
-                >Areas en Buenas Condiciones</q-item-label
-              >
+              <q-item-label class="text-h4">
+                Areas en Buenas Condiciones
+              </q-item-label>
             </q-item-section>
           </q-item>
           <q-img
@@ -61,8 +59,6 @@
           />
         </q-card-section>
         <q-card-section>
-          <!-- TODO: FALTA QUE FILTE LAS IMAGENES POR AREA DE OPORTUNIDAD Y POR DEPARTAMENTO -->
-          <!-- TODO: PONER UNA LEYENDA DE QUE NO HAY EVIDENCIAS EN ESTA ÁREA PARA LAS QUE NO TIENEN FOTO -->
           <q-item>
             <q-item-section avatar>
               <q-avatar>
@@ -85,8 +81,6 @@
           />
         </q-card-section>
         <q-card-section>
-          <!-- TODO: FALTA QUE FILTE LAS IMAGENES POR AREA DE OPORTUNIDAD Y POR DEPARTAMENTO -->
-          <!-- TODO: PONER UNA LEYENDA DE QUE NO HAY EVIDENCIAS EN ESTA ÁREA PARA LAS QUE NO TIENEN FOTO -->
           <q-item>
             <q-item-section avatar>
               <q-avatar>
@@ -94,9 +88,9 @@
               </q-avatar>
             </q-item-section>
             <q-item-section>
-              <q-item-label class="text-h4"
-                >Areas para Mantenimiento</q-item-label
-              >
+              <q-item-label class="text-h4">
+                Areas para Mantenimiento
+              </q-item-label>
             </q-item-section>
           </q-item>
           <q-img
@@ -127,23 +121,25 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { formatearFecha } from "../helpers/formatearFecha";
+
 import { useReporteStore } from "../stores/reportes";
 import { useEvidenciasStore } from "../stores/evidencias";
 import { useDepartamentosStore } from "../stores/departamentos";
 
 export default {
   setup() {
+    const model = ref({});
+    const modelArchivo = ref(null);
+    const abrirModalDetalleEvidencias = ref(false);
+
     const useReporte = useReporteStore();
     const { reporte } = storeToRefs(useReporte);
 
     const useDepartamento = useDepartamentosStore();
     const { departamentos } = storeToRefs(useDepartamento);
-
-    const model = ref({});
-    const abrirModalDetalleEvidencias = ref(false);
 
     const useEvidencia = useEvidenciasStore();
     const { guardarImagen, guardarReferenciaImagen, cargarEvidencias } =
@@ -151,20 +147,14 @@ export default {
     const { evidencias, evidenciaCargada } = storeToRefs(useEvidencia);
 
     const abrir = () => {
-      console.log("DESDE EL MODAL DETALLE EVIDENCIA");
       model.value = departamentos.value[0];
       abrirModalDetalleEvidencias.value = true;
     };
 
-    const modelArchivo = ref(null);
-
-    onMounted(() => {});
-
     const enviarEvidencia = (file, modelDepto, modelAre) => {
-      var bodyFormData = new FormData();
-      bodyFormData.append("image", file);
-      guardarImagen(bodyFormData).then(() => {
-        console.log(evidenciaCargada);
+      let formData = new FormData();
+      formData.append("image", file);
+      guardarImagen(formData).then(() => {
         guardarReferenciaImagen({
           url_imagen: evidenciaCargada.value.url,
           id_reporte: reporte.value.id_reporte,
@@ -177,11 +167,6 @@ export default {
     const filtrarEvidencia = (id_area) =>
       evidencias.value.filter((evidencia) => evidencia.id_area === id_area);
 
-    const finalizarEvaluacion = () => {
-      console.log("FINALIZANDO EVALUACION");
-      //TODO: CALCULAR PROMEDIO Y GUARDAR
-    };
-
     return {
       abrir,
       abrirModalDetalleEvidencias,
@@ -191,14 +176,10 @@ export default {
       formatearFecha,
       model,
       cumpleModel: ref(null),
-      finalizarEvaluacion,
       evidencias,
-      enviarEvidencia,
       modelArchivo,
       modelArea: ref({ id_area: 1, nombre: "Area en buenas condiciones" }),
       cargarEvidencias,
-      expanded: ref(["Areas de clasificación", "dashboard"]),
-
       buenas: [
         {
           label: "Areas en buenas condiciones",

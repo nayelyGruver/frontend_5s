@@ -1,6 +1,7 @@
 import { api } from 'src/boot/axios'
 import { defineStore }   from 'pinia'
 import { ref }  from 'vue'
+import { notificacion } from 'src/helpers/mensajes'
 
 export const useReporteStore = defineStore("reportes", () => {
     const reportes  = ref ([])
@@ -26,6 +27,7 @@ export const useReporteStore = defineStore("reportes", () => {
             await api.delete(`/reporte/${id}`)
             reportes.value = reportes.value.filter( reporte => reporte.id_reporte !== id )
             console.log("eliminandoReporte ", id)
+            notificacion('positive', `Reporte ${id} eliminado correctamente.`)
         }catch(error){
             console.log(error)
         }
@@ -63,6 +65,7 @@ export const useReporteStore = defineStore("reportes", () => {
           const {data} = await api.put('/reporteEvaluacion', reporteObj)
           // reportes.value.find
           reportes.value.find( r => r.id_reporte === reporte.value.id_reporte ).calificacion = data[0]?.calificacionMes
+          notificacion('positive', `Reporte de evaluación generado correctamente.`)
           return data
       } catch(error){
           console.log(error)

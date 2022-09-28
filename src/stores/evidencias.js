@@ -2,6 +2,7 @@
 import { api } from 'src/boot/axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { notificacion } from 'src/helpers/mensajes'
 
 export const useEvidenciasStore = defineStore("evidencias", () => {
     const evidenciaCargada = ref (null)
@@ -22,7 +23,10 @@ export const useEvidenciasStore = defineStore("evidencias", () => {
         try {
             const { data } = await api.post(`/evidencia`, evidenciaObj)
             evidencia.value = data
+            notificacion('positive', ` Evidencia guardada correctamente.`)
+
         } catch(error){
+          notificacion('negative', `Error a guardar, cargue el archivo desde su almacenamiento interno.`)
             console.log(error)
         }
     }

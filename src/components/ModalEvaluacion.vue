@@ -41,7 +41,7 @@
             :rows-per-page-options="[0]"
             ><template v-slot:body-cell-cumple="props">
               <q-td class="space-around justify-evenly aling-items-center">
-                <!-- <q-checkbox v-model="valChecks[index]" /> -->
+                <!-- <q-checkbox v-model="valChecks[index]" TODO: HACER CHECKS QUE TENGAN UN VMODEL DIFERENTE  /> -->
                 <q-btn
                   @click="puntuarNoCumple(props.row.id_evaluacion, props.class)"
                   icon="close"
@@ -115,12 +115,12 @@
 import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { formatearFecha } from "../helpers/formatearFecha";
-import { useEvaluacionStore } from "../stores/evaluacion";
-import { useReporteStore } from "../stores/reportes";
-
-import { useDepartamentosStore } from "../stores/departamentos";
 import ModalObservaciones from "src/components/ModalObservaciones.vue";
 import ModalEvidencias from "../components/ModalEvidencias.vue";
+
+import { useEvaluacionStore } from "../stores/evaluacion";
+import { useReporteStore } from "../stores/reportes";
+import { useDepartamentosStore } from "../stores/departamentos";
 
 export default {
   components: {
@@ -131,98 +131,52 @@ export default {
     const useEvaluacion = useEvaluacionStore();
     const {
       obtenerEvaluacion,
-      puntuarCumpleCriterio,
       puntuarNoCumpleCriterio,
       obtenerCriterioEvaluacion,
     } = useEvaluacion;
     const { evaluacion } = storeToRefs(useEvaluacion);
 
     const useReporte = useReporteStore();
-    const { obtenerReporteId, guardarCalificacionReporte, obtenerReportes } =
-      useReporte;
-    const { reporte, listaPuntosCriterios } = storeToRefs(useReporte);
-    const abrirModalEvidenciasRef = ref(null);
-    const botonTerminarEvaluacion = ref(false);
+    const { guardarCalificacionReporte } = useReporte;
+    const { reporte } = storeToRefs(useReporte);
+
     const useDepartamento = useDepartamentosStore();
     const { departamentos } = storeToRefs(useDepartamento);
 
+    const abrirModalEvidenciasRef = ref(null);
+    const botonTerminarEvaluacion = ref(false);
     const model = ref({});
     const abrirModalEvaluacion = ref(false);
     const abrirModalObservacionesRef = ref(null);
-    const valChecks = ref([
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-    ]);
+
     const btnNegativeColor = ref("negative");
     const btnPositiveColor = ref("positive");
 
     const abrir = () => {
-      console.log("DESDE EL MODAL EVALUACION");
       model.value = departamentos.value[0];
       abrirModalEvaluacion.value = true;
     };
-
-    onMounted(() => {});
 
     const filtrarEvaluacion = (nombre) =>
       evaluacion.value.filter((criterio) => criterio.nombre_s === nombre);
 
     const agregarObservaciones = (id_evaluacion) => {
-      console.log("Agregar Observaciones", id_evaluacion);
       obtenerCriterioEvaluacion(id_evaluacion);
       abrirModalObservacionesRef.value.abrir(true);
     };
 
-    const puntuarCumple = (id_evaluacion, criterio) => {
-      // btnNegativeColor.value = "disableNegative";
-      // console.log(listaPuntosCriterios);
-      // console.log(
-      //   "JEEEEEEEE",
-      //   listaPuntosCriterios.value.filter((c) => c.criterio === criterio)
-      //     ?.puntos
-      // );
-      // listaPuntosCriterios.value.forEach((criterio) =>
-      //   console.log(criterio.puntos)
-      // );
-      // let puntos = listaPuntosCriterios.value.filter(
-      //   (c) => c.criterio == criterio
-      // )?.puntos;
-      // puntuarCumpleCriterio({
-      //   id_evaluacion: id_evaluacion,
-      //   puntos: puntos,
-      // });
-    };
     const puntuarNoCumple = (id_evaluacion) => {
       // btnPositiveColor.value = "disablePositive";
       puntuarNoCumpleCriterio({
         id_evaluacion: id_evaluacion,
         puntos: 0,
       });
-      console.log("Puntuar No Cumple", id_evaluacion);
     };
     const calcularCalificacion = () => {
-      console.log("CALCULANDO CALIFICACION");
       abrirModalEvaluacion.value = false;
       guardarCalificacionReporte(reporte.value);
-      // obtenerReportes(); //<-----------Obtener Reportes esto se debe quitar pero lo reviso TODO:
     };
     const subirEvidencias = () => {
-      console.log("en subir evidencias");
       abrirModalEvidenciasRef.value.abrir(true);
       botonTerminarEvaluacion.value = true;
     };
@@ -282,14 +236,12 @@ export default {
       model,
       cumpleModel: ref(null),
       agregarObservaciones,
-      puntuarCumple,
       puntuarNoCumple,
       subirEvidencias,
       abrirModalObservacionesRef,
       abrirModalEvidenciasRef,
       botonTerminarEvaluacion,
       calcularCalificacion,
-      valChecks,
       btnNegativeColor,
       btnPositiveColor,
     };

@@ -122,6 +122,23 @@ export default {
     const modalNuevoReporte = ref(null);
     const confirm = ref(false);
 
+    const verDetallesReportes = (id) => {
+      obtenerReporteId(id);
+      obtenerDepartamentos(reporte.value.id_empresa).then(() => {
+        obtenerEvaluacion(id, departamentos.value[0]?.id_departamento);
+        abrirModalRef.value.abrir(true);
+      });
+    };
+
+    const crearNuevoReporte = () => {
+      modalNuevoReporte.value.abrir(true);
+    };
+
+    const confirmarEliminarReporte = (id) => {
+      obtenerReporteId(id);
+      confirm.value = true;
+    };
+
     const columns = [
       {
         name: "id_reporte",
@@ -167,24 +184,6 @@ export default {
         sortable: true,
       },
     ];
-
-    const verDetallesReportes = (id) => {
-      obtenerReporteId(id);
-      obtenerDepartamentos(reporte.value.id_empresa).then(() => {
-        obtenerEvaluacion(id, departamentos.value[0]?.id_departamento);
-        abrirModalRef.value.abrir(true);
-        console.log(evaluacion);
-      });
-    };
-
-    const crearNuevoReporte = () => {
-      modalNuevoReporte.value.abrir(true);
-    };
-
-    const confirmarEliminarReporte = (id) => {
-      obtenerReporteId(id);
-      confirm.value = true;
-    };
 
     return {
       columns,

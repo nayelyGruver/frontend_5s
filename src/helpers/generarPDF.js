@@ -4,6 +4,7 @@ import "jspdf-autotable";
 // Default export is a4 paper, portrait, using millimeters for units
 export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, evaluacion, evidencias) =>{
   const doc = new jsPDF();
+  console.log("Generando Reporte")
   // HAY QUE SUBIR LA IMAGEN DEL LOGO AL SERVIDOR Y PONER LA URL DE LA IMAGEN AQUI
   // doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
 

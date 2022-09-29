@@ -25,7 +25,7 @@ export const useUsuarioStore = defineStore("usuarios", () => {
         }
         try {
           const { data } = await apiUsuarios.get('/usuarios/perfil', configuracion)
-          usuarioAutenticado.value = { ...data } 
+          // usuarioAutenticado.value = { ...data } 
 
         } catch ( error ) {
 

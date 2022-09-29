@@ -21,11 +21,12 @@
             class="absolute-bottom-right"
             style="border-top-left-radius: 5px"
           >
-            <q-avatar class="avatar">
-              <!-- <img src="../img/yo.png" /> -->
-              <!-- {{ inicialesUsuario(usuarioAutenticado?.nombre) }} -->
-            </q-avatar>
-            <!-- {{ usuarioAutenticado?.nombre }} <span style="font-weight:bold;"></span>  -->
+            <!-- <q-avatar class="avatar">
+              <img src="../img/yo.png" />
+              {{ inicialesUsuario(usuarioAutenticado?.nombre) }}
+            </q-avatar> -->
+            {{ usuarioAutenticado?.nombre }}
+            <span style="font-weight: bold"></span>
           </div>
         </q-img>
       </div>

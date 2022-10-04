@@ -1,6 +1,6 @@
 <template>
   <div class="contenedor-login">
-    <h1>Portal de Usuarios</h1>
+    <h1>Portal 5s</h1>
     <form
       class="bg-white contenedor formulario-login"
       @submit.prevent.stop="iniciarSesion"

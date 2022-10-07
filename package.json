@@ -1,8 +1,8 @@
 {
-  "name": "frontend-5s",
+  "name": "portal5s",
   "version": "0.0.1",
   "description": "Frontend Aplicacion 5S Gruver",
-  "productName": "frontend_5s",
+  "productName": "Portal 5s",
   "author": "nayelyGruver <nperez@gruver.com>",
   "private": true,
   "scripts": {

@@ -1,4 +1,4 @@
-# frontend_5s (frontend-5s)
+# frontend_5s (portal5s)
 
 Frontend Aplicacion 5S Gruver
 

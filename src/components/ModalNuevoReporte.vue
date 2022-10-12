@@ -130,7 +130,7 @@ export default {
 
     const disableSelectSucursal = ref(true);
     const modelCheck = ref(false);
-    const modelFecha = ref("2022/09/22");
+    const modelFecha = ref("2022/10/12");
     const modelEmpresa = ref({ id_empresa: 10, nombre: "GRUVER" });
 
     let reporteObj = reactive({

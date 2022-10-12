@@ -7,9 +7,11 @@ export const useEvaluacionStore = defineStore( "evaluaciones", () => {
     const evaluacion = ref ([])
     const criterioEvaluacion = ref(null)
 
+
     const obtenerEvaluacion = async (idReporte="", idDepartamento="") => {
         try {
             const { data } = await api.get(`/evaluacion/${idReporte}/${idDepartamento}`)
+
             evaluacion.value = [...data]
         } catch(error){
             console.log(error)

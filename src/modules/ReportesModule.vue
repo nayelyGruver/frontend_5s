@@ -88,7 +88,6 @@
 </template>
 
 <script>
-// TODO: FILTRADO DE REPORTES POR EMPRESA Y QUE POR DEFECTO EL FILTRADO SEA POR LA EMPRESA DEL USUARIO
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 
@@ -105,6 +104,7 @@ export default {
     ModalDetallesReporte,
     ModalNuevoReporte,
   },
+
   setup() {
     const useReporte = useReporteStore();
     const { eliminarReporte, obtenerReporteId } = useReporte;

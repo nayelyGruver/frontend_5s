@@ -149,11 +149,10 @@ export default {
       submitting.value = true;
       //Iserta el nuevo reporte y carga en el state reporte nuevo e Inserción masiva de evaluación de criterios
       reporte.value = insertarReporte(reporteObj);
-      console.log("REPORTE NUEVO", reporte);
+
       obtenerDepartamentos(reporteObj.id_empresa).then(() => {
         model.value = departamentos.value[0];
       });
-      console.log("MODEL VALUE", model);
       setTimeout(() => {
         // abrirModal.value = false;
         obtenerEvaluacion(
@@ -163,8 +162,6 @@ export default {
         abrirModalEvaluacionRef.value.abrir(true);
         submitting.value = false;
       }, 2000);
-      //abrir nuevo modal
-      console.log("ANTES DE ABRIR EL MODAL");
     };
     const habilitarSelectSucursal = () => {
       modelCheck.value
@@ -176,9 +173,11 @@ export default {
     const abrir = () => {
       abrirModal.value = true;
     };
+
     onMounted(() => {
       obtenerEmpresas();
     });
+
     return {
       abrir,
       abrirModal,

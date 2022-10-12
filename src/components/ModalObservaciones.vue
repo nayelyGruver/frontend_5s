@@ -33,7 +33,6 @@
               :loading="submitting"
               v-close-popup
             >
-              <!-- TODO: QUE EL BOTON SE VUELVA A HABILIAR CUANDO SE ABRA OTRA VEZ -->
               <template v-slot:loading>
                 <q-spinner-facebook />
               </template>
@@ -49,7 +48,7 @@
 import { useEmpresasStore } from "../stores/empresas.js";
 import { useEvaluacionStore } from "../stores/evaluacion.js";
 
-import { ref, reactive, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 
 export default {
@@ -75,7 +74,7 @@ export default {
       criterioEvaluacion.value.observaciones = observaciones;
       agregarObservacionCriterio(criterioEvaluacion).then(() => {
         submitting.value = false;
-        //TODO: MENSAJE QUE AVISE QUE YA SE INSERTO LA OBSERVACION CORRECTAMENTE
+        modelText.value = "";
       });
     };
 

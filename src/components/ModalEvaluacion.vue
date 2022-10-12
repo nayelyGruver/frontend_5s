@@ -41,9 +41,8 @@
             :rows-per-page-options="[0]"
             ><template v-slot:body-cell-cumple="props">
               <q-td class="space-around justify-evenly aling-items-center">
-                <!-- <q-checkbox v-model="valChecks[index]" TODO: HACER CHECKS QUE TENGAN UN VMODEL DIFERENTE  /> -->
                 <q-btn
-                  @click="puntuarNoCumple(props.row.id_evaluacion, props.class)"
+                  @click="puntuarNoCumple(props.row.id_evaluacion)"
                   icon="close"
                   round
                   label=""
@@ -53,7 +52,7 @@
                 </q-btn>
                 <q-btn
                   @click="
-                    puntuarCumple(props.row.id_evaluacion, props.row.criterio)
+                    puntuarCumple(props.row.id_evaluacion, props.row.puntos)
                   "
                   icon="done"
                   round
@@ -146,6 +145,25 @@ export default {
     const abrirModalEvidenciasRef = ref(null);
     const botonTerminarEvaluacion = ref(false);
     const model = ref({});
+    const estadoCheck = ref([
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ]);
     const abrirModalEvaluacion = ref(false);
     const abrirModalObservacionesRef = ref(null);
 
@@ -172,6 +190,15 @@ export default {
         puntos: 0,
       });
     };
+
+    const puntuarCumple = (id_evaluacion, punto) => {
+      // btnPositiveColor.value = "disablePositive";
+      puntuarNoCumpleCriterio({
+        id_evaluacion: id_evaluacion,
+        puntos: punto,
+      });
+    };
+
     const calcularCalificacion = () => {
       abrirModalEvaluacion.value = false;
       guardarCalificacionReporte(reporte.value);
@@ -237,6 +264,7 @@ export default {
       cumpleModel: ref(null),
       agregarObservaciones,
       puntuarNoCumple,
+      puntuarCumple,
       subirEvidencias,
       abrirModalObservacionesRef,
       abrirModalEvidenciasRef,

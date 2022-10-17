@@ -1,12 +1,12 @@
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
-// Default export is a4 paper, portrait, using millimeters for units
-export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, evaluacion, evidencias) =>{
+export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, evaluacion, evidencias) =>{
   const doc = new jsPDF();
   console.log("Generando Reporte")
+
   // HAY QUE SUBIR LA IMAGEN DEL LOGO AL SERVIDOR Y PONER LA URL DE LA IMAGEN AQUI
-  // doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
+  doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
 
   doc.autoTable({
     theme: 'plain',
@@ -23,7 +23,6 @@ export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, e
     margin : {top: 0, bottom: 0},
     border : {top: 0, right: 0, bottom: 0, left: 0},
     cellPadding: {top: 1, right: 1, bottom: 1, left: 1},
-    // bodyStyles: { 0: { halign: 'center', fontSize: 14}, 2: { halign: 'center', fontSize: 14 }, 3: { halign: 'center',  fontSize: 14 } },
     columns :
     [{header: "",  dataKey: 'empresa' },
      {header: "",  dataKey: 'departamento' },
@@ -34,7 +33,7 @@ export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, e
     ],
   })
 
-  let num = 1
+  let numeroDeS = 1
 
   lista_s.forEach(s => {
     doc.autoTable({
@@ -43,12 +42,12 @@ export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, e
       border : {top: 0, right: 0, bottom: 0, left: 0},
       cellPadding: {top: 0, right: 0, bottom: 0, left: 0},
       body: [
-        { nombre_s: ` ${num}S.${s.nombre.toUpperCase() }`},
+        { nombre_s: ` ${numeroDeS}S.${s.nombre.toUpperCase() }`},
       ],
       columnStyles: { 0: {  fontSize: 10, fontStyle: 'bold'}}
     })
 
-    num = num + 1
+    numeroDeS = numeroDeS + 1
 
     doc.autoTable({
       styles: { fontSize: 9},
@@ -84,32 +83,39 @@ export const generarPDF = (empresa, departamento, fecha,calificacion, lista_s, e
       doc.addPage("a4","p")
       doc.getFontSize(26)
       doc.text(90, 20,"Evidencias 5's");
+      doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
       doc.getFontSize(8)
       doc.text(20, 27,area);
       indexPosicion = 0
   }
 
-  nuevaPaginaEvidencias("Areas en Buenas Condiciones")
-  areasEnBuenasCondiciones.forEach(evidencia => {
-    doc.addImage(evidencia?.path_foto,'jpg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
-    indexPosicion == 5 ? nuevaPaginaEvidencias("Areas en Buenas Condiciones"):
-    indexPosicion < 5? indexPosicion++ : indexPosicion = 0
-  })
+  if(areasEnBuenasCondiciones.length > 0){
+    nuevaPaginaEvidencias("Areas en Buenas Condiciones")
+    areasEnBuenasCondiciones.forEach(evidencia => {
+      doc.addImage(evidencia?.path_foto,'jpg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
+      indexPosicion == 5 ? nuevaPaginaEvidencias("Areas en Buenas Condiciones"):
+      indexPosicion < 5? indexPosicion++ : indexPosicion = 0
+    })
+  }
 
-  nuevaPaginaEvidencias("Areas de Oportunidad")
-  doc.text(posiciones[indexPosicion].x -10 , posiciones[indexPosicion].y -3 ,"")
-  areasDeOportunidad.forEach(evidencia => {
-    doc.addImage(evidencia?.path_foto,'jpg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
-    indexPosicion == 5 ? nuevaPaginaEvidencias("Areas de Oportunidad"):
-    indexPosicion < 5? indexPosicion++ : indexPosicion = 0
-  })
+  if(areasDeOportunidad.length > 0){
+    nuevaPaginaEvidencias("Areas de Oportunidad")
+    areasDeOportunidad.forEach(evidencia => {
+      doc.addImage(evidencia?.path_foto,'jpg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
+      indexPosicion == 5 ? nuevaPaginaEvidencias("Areas de Oportunidad"):
+      indexPosicion < 5? indexPosicion++ : indexPosicion = 0
+    })
+  }
 
-  nuevaPaginaEvidencias("Areas para Mantenimiento")
-  areasParaMantenimiento.forEach(evidencia => {
-    doc.addImage(evidencia?.path_foto,'jpg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
-    indexPosicion == 5 ? nuevaPaginaEvidencias("Areas para Mantenimiento"):
-    indexPosicion < 5? indexPosicion++ : indexPosicion = 0
-  })
+  if(areasParaMantenimiento.length > 0){
+    nuevaPaginaEvidencias("Areas para Mantenimiento")
+    areasParaMantenimiento.forEach(evidencia => {
+      doc.addImage(evidencia?.path_foto,'jpg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
+      indexPosicion == 5 ? nuevaPaginaEvidencias("Areas para Mantenimiento"):
+      indexPosicion < 5? indexPosicion++ : indexPosicion = 0
+    })
+  }
+
 
   doc.save(`evaluacion_5s_${empresa}_${departamento}_${fecha}.pdf`)
 

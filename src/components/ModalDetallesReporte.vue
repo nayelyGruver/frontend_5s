@@ -1,7 +1,6 @@
 <template>
   <q-dialog v-model="abrirModal" full-width>
     <q-page-container class="bg-white text-dark">
-      <!-- TODO:  Boton de cerrar en la esquina-->
       <div class="q-px-lg">
         <div class="row items-baseline justify-between">
           <h2 class="text-dark">
@@ -11,7 +10,6 @@
         </div>
         <div class="justify-end">
           <div class="">
-            <!-- TODO:  LA CALIFICACIÓN ES POR DEPARTAMENTO-->
             <p>Calificación: {{ calificacionDepartamento.calificacion }}/100</p>
             <q-select
               outlined
@@ -26,7 +24,6 @@
                 )
               "
             >
-              <!-- TODO: CAMBIOS ARRIBA -->
               <template v-slot:selected>
                 <q-chip color="white" text-color="primary" class="q-ma-none">
                   {{ modelDepartamento?.nombre }}

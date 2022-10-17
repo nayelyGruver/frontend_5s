@@ -1,7 +1,6 @@
 <template>
   <q-scroll-area class="fit">
     <q-list>
-
       <template v-for="(menuItem, index) in menulist" :key="index">
         <q-item
           clickable
@@ -15,30 +14,34 @@
           </q-item-section>
 
           <q-item-section>
-            {{menuItem.label}}
+            {{ menuItem.label }}
           </q-item-section>
         </q-item>
 
-        <q-separator/>
+        <q-separator />
       </template>
-
     </q-list>
   </q-scroll-area>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
-const menulist = ref([])
-const router = useRouter()
-onMounted( () => {
-  menulist.value = router.options.routes.find(r => {
-    return r.name === 'principal'
-  }).children.filter(route => route.label)
-  if (router.currentRoute.value.name === 'principal') router.replace({ name: 'dashboard' })
-})
+const menulist = ref([]);
+const router = useRouter();
+
+onMounted(() => {
+  menulist.value = router.options.routes
+    .find((r) => {
+      return r.name === "principal";
+    })
+    .children.filter((route) => route.label);
+  if (router.currentRoute.value.name === "principal")
+    router.replace({ name: "dashboard" });
+});
 </script>
+
 <style lang="sass" scope>
 .my-menu-link
   color: white

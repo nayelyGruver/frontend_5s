@@ -12,7 +12,6 @@ const routes = [
     children: [
       { path: '', icono:'dashboard', label: 'Inicio', name: 'dashboard',component: () => import('src/modules/dashboard/DashBoard.vue') },
       { path: 'reportes', icono:'manage_accounts', label: 'Reportes 5s', name: 'reportes',component: () => import('src/modules/ReportesModule.vue') },
-      
     ]
   },
 

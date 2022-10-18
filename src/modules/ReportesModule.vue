@@ -55,7 +55,16 @@
               >
                 <q-tooltip> Eliminar Reporte </q-tooltip>
               </q-btn>
+              <q-btn
+                @click="abrirVistaEvaluacion(props.row.id_reporte)"
+                flat
+                color="primary"
+                icon="edit"
+              >
+                <q-tooltip> Modificar Reporte </q-tooltip>
+              </q-btn>
             </q-td>
+
           </template>
         </q-table>
         <template>
@@ -82,6 +91,7 @@
         </template>
         <ModalDetallesReporte ref="abrirModalRef"></ModalDetallesReporte>
         <ModalNuevoReporte ref="modalNuevoReporte"> </ModalNuevoReporte>
+        <ModalEvaluacion ref="abrirModalEvaluacionRef"></ModalEvaluacion>
       </div>
     </q-page-container>
   </q-layout>
@@ -95,17 +105,23 @@ import { formatearFecha } from "../helpers/formatearFecha";
 import ModalDetallesReporte from "../components/ModalDetallesReporte.vue";
 import ModalNuevoReporte from "../components/ModalNuevoReporte.vue";
 
+import ModalEvaluacion from "../components/ModalEvaluacion.vue";
+
 import { useReporteStore } from "../stores/reportes";
 import { useDepartamentosStore } from "../stores/departamentos";
 import { useEvaluacionStore } from "../stores/evaluacion";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
     ModalDetallesReporte,
     ModalNuevoReporte,
+    ModalEvaluacion,
   },
 
   setup() {
+    const router = useRouter();
+
     const useReporte = useReporteStore();
     const { eliminarReporte, obtenerReporteId } = useReporte;
     const { reportes, reporte } = storeToRefs(useReporte);
@@ -120,6 +136,7 @@ export default {
 
     const abrirModalRef = ref(null);
     const modalNuevoReporte = ref(null);
+    const abrirModalEvaluacionRef = ref(null);
     const confirm = ref(false);
 
     const verDetallesReportes = (id) => {
@@ -185,7 +202,18 @@ export default {
       },
     ];
 
+    const abrirVistaEvaluacion = (id_reporte) => {
+      obtenerReporteId(id_reporte)
+      console.log(evaluacion)
+      obtenerDepartamentos(reporte.value.id_empresa).then(() => {
+        obtenerEvaluacion(id_reporte, departamentos.value[0]?.id_departamento);
+        abrirModalEvaluacionRef.value.abrir(true);
+      });
+      // router.replace({ name: "evaluacion" })
+    }
+
     return {
+      abrirVistaEvaluacion,
       columns,
       reportes,
       reporte,
@@ -197,6 +225,7 @@ export default {
       eliminarReporte,
       modalNuevoReporte,
       crearNuevoReporte,
+      abrirModalEvaluacionRef,
     };
   },
 };

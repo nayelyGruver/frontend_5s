@@ -145,25 +145,7 @@ export default {
     const abrirModalEvidenciasRef = ref(null);
     const botonTerminarEvaluacion = ref(false);
     const model = ref({});
-    const estadoCheck = ref([
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-    ]);
+
     const abrirModalEvaluacion = ref(false);
     const abrirModalObservacionesRef = ref(null);
 
@@ -184,7 +166,6 @@ export default {
     };
 
     const puntuarNoCumple = (id_evaluacion) => {
-      // btnPositiveColor.value = "disablePositive";
       puntuarNoCumpleCriterio({
         id_evaluacion: id_evaluacion,
         puntos: 0,
@@ -192,7 +173,6 @@ export default {
     };
 
     const puntuarCumple = (id_evaluacion, punto) => {
-      // btnPositiveColor.value = "disablePositive";
       puntuarNoCumpleCriterio({
         id_evaluacion: id_evaluacion,
         puntos: punto,

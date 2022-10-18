@@ -8,15 +8,15 @@ export const useUsuarioStore = defineStore("usuarios", () => {
     const usuariosActivos = ref([])
     const usuariosBajas = ref([])
     const cargando = ref(true)
-  
+
     const autenticarUsuario = async () => {
         const token = localStorage.getItem('token')
-  
+
         if (!token) {
             console.log('No hay token')
             return
         }
-  
+
         const configuracion = {
             headers: {
               "Content-Type": "application/json",
@@ -24,14 +24,14 @@ export const useUsuarioStore = defineStore("usuarios", () => {
             }
         }
         try {
-          const { data } = await apiUsuarios.get('/usuarios/perfil', configuracion)
-          // usuarioAutenticado.value = { ...data } 
+          // const { data } = await apiUsuarios.get('/usuarios/perfil', configuracion)
+          // usuarioAutenticado.value = { ...data }
 
         } catch ( error ) {
 
           console.log( error.response.msg )
         }
-  
+
       }
 
       const obtenerUsuarios = async () => {
@@ -42,7 +42,7 @@ export const useUsuarioStore = defineStore("usuarios", () => {
         } catch ( error ) {
 
           // console.log(error.response.msg)
-          
+
         } finally {
             cargando.value = false
         }
@@ -54,16 +54,16 @@ export const useUsuarioStore = defineStore("usuarios", () => {
             usuariosBajas.value = data
 
           } catch ( error ) {
-            
+
             console.log(error)
-            
+
           } finally {
             cargando.value = false
           }
       }
 
       return {
-        usuarioAutenticado, 
+        usuarioAutenticado,
         autenticarUsuario,
         usuariosActivos,
         usuariosBajas,

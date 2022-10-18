@@ -139,6 +139,8 @@ export default {
     const abrirModalEvaluacionRef = ref(null);
     const modelEliminar = ref(false);
 
+
+
     const verDetallesReportes = (id) => {
       obtenerReporteId(id);
       obtenerDepartamentos(reporte.value.id_empresa).then(() => {

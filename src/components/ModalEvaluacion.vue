@@ -149,9 +149,6 @@ export default {
     const abrirModalEvaluacion = ref(false);
     const abrirModalObservacionesRef = ref(null);
 
-    const btnNegativeColor = ref("negative");
-    const btnPositiveColor = ref("positive");
-
     const abrir = () => {
       model.value = departamentos.value[0];
       abrirModalEvaluacion.value = true;
@@ -187,6 +184,7 @@ export default {
       abrirModalEvidenciasRef.value.abrir(true);
       botonTerminarEvaluacion.value = true;
     };
+
     const lista_s = [
       { nombre: "clasificar" },
       { nombre: "ordenar" },
@@ -250,8 +248,6 @@ export default {
       abrirModalEvidenciasRef,
       botonTerminarEvaluacion,
       calcularCalificacion,
-      btnNegativeColor,
-      btnPositiveColor,
     };
   },
 };

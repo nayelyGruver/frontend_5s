@@ -12,22 +12,22 @@
         </q-card-section>
         <q-card-section>
           <q-form
-            @submit.prevent="enviarEvidencia(modelArchivo, model, modelArea)"
+            @submit.prevent="enviarEvidencia(modelArchivo, modelDepartamento, modelArea)"
           >
             <div class="">
               <q-select
                 outlined
-                v-model="model"
+                v-model="modelDepartamento"
                 :options="departamentos"
                 option-label="nombre"
                 label="Departamento"
                 @update:model-value="
-                  cargarEvidencias(reporte.id_reporte, model.id_departamento)
+                  cargarEvidencias(reporte.id_reporte, modelDepartamento.id_departamento)
                 "
               >
                 <template v-slot:selected>
                   <q-chip color="white" text-color="primary" class="q-ma-none">
-                    {{ model?.nombre }}
+                    {{ modelDepartamento?.nombre }}
                   </q-chip>
                 </template>
               </q-select>
@@ -131,8 +131,9 @@ import { useDepartamentosStore } from "../stores/departamentos";
 
 export default {
   setup() {
-    const model = ref({});
+    const modelDepartamento = ref({});
     const modelArchivo = ref(null);
+    const modelArea = ref({ id_area: 1, nombre: "Area en buenas condiciones" })
     const abrirModalDetalleEvidencias = ref(false);
 
     const useReporte = useReporteStore();
@@ -142,26 +143,12 @@ export default {
     const { departamentos } = storeToRefs(useDepartamento);
 
     const useEvidencia = useEvidenciasStore();
-    const { guardarImagen, guardarReferenciaImagen, cargarEvidencias } =
-      useEvidencia;
-    const { evidencias, evidenciaCargada } = storeToRefs(useEvidencia);
+    const { cargarEvidencias } = useEvidencia;
+    const { evidencias } = storeToRefs(useEvidencia);
 
     const abrir = () => {
-      model.value = departamentos.value[0];
+      modelDepartamento.value = departamentos.value[0];
       abrirModalDetalleEvidencias.value = true;
-    };
-
-    const enviarEvidencia = (file, modelDepto, modelAre) => {
-      let formData = new FormData();
-      formData.append("image", file);
-      guardarImagen(formData).then(() => {
-        guardarReferenciaImagen({
-          url_imagen: evidenciaCargada.value.url,
-          id_reporte: reporte.value.id_reporte,
-          id_departamento: modelDepto.id_departamento,
-          id_area: modelAre.id_area,
-        });
-      });
     };
 
     const filtrarEvidencia = (id_area) =>
@@ -174,30 +161,14 @@ export default {
       departamentos,
       reporte,
       formatearFecha,
-      model,
-      cumpleModel: ref(null),
+      modelDepartamento,
       evidencias,
       modelArchivo,
-      modelArea: ref({ id_area: 1, nombre: "Area en buenas condiciones" }),
+      modelArea,
       cargarEvidencias,
-      buenas: [
-        {
-          label: "Areas en buenas condiciones",
-          icon: "done",
-        },
-      ],
-      oportunidad: [
-        {
-          label: "Areas de oportunidad",
-          icon: "close",
-        },
-      ],
-      mantenimiento: [
-        {
-          label: "Areas para mantenimiento",
-          icon: "construction",
-        },
-      ],
+      buenas: [ { label: "Areas en buenas condiciones", icon: "done"}],
+      oportunidad: [{ label: "Areas de oportunidad", icon: "close"} ],
+      mantenimiento: [ { label: "Areas para mantenimiento", icon: "construction"} ],
     };
   },
 };

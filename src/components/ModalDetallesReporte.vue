@@ -131,14 +131,12 @@ export default {
     onMounted(() => {});
 
     const cambiarDepartamento = (id_reporte, id_departamento) => {
-      //TODO:TRABAJANDO AQUI
       obtenerCalificacionDepartamento(id_reporte, id_departamento);
       obtenerEvaluacion(id_reporte, id_departamento);
       cargarEvidencias(id_reporte, id_departamento);
     };
 
-    const descargarReporte = (departamentos) => {
-      console.log("DESCARGAR REPORTE");
+    const descargarReporte = () => {
       generarPDF(
         reporte.value.empresa,
         modelDepartamento.value.nombre,
@@ -153,12 +151,10 @@ export default {
     const abrir = () => {
       modelDepartamento.value = departamentos.value[0];
       abrirModal.value = true;
-      //TODO:TRABAJANDO AQUI
       obtenerCalificacionDepartamento(
         reporte.value.id_reporte,
         departamentos.value[0].id_departamento
       );
-
       cargarEvidencias(
         reporte.value.id_reporte,
         departamentos.value[0].id_departamento
@@ -169,13 +165,10 @@ export default {
       evaluacion.value.filter((criterio) => criterio.nombre_s === nombre);
 
     const verEvidencias = () => {
-      console.log(evaluacion.value);
-      console.log("ESTAS EN EL METODO VER EVIDENCIAS");
       cargarEvidencias(
         reporte.value.id_reporte,
         departamentos.value[0].id_departamento
       ).then(() => {
-        console.log(evidencias.value[0]?.path_foto);
         abrirModalDetalleEvidenciaRef.value.abrir(true);
       });
     };

@@ -100,7 +100,7 @@ import { useEmpresasStore } from "../stores/empresas.js";
 import { useReporteStore } from "../stores/reportes.js";
 import { useEvaluacionStore } from "../stores/evaluacion.js";
 
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import ModalEvaluacion from "../components/ModalEvaluacion.vue";
 import { useDepartamentosStore } from "../stores/departamentos";
@@ -123,7 +123,6 @@ export default {
 
     const useEvaluacion = useEvaluacionStore();
     const { obtenerEvaluacion } = useEvaluacion;
-    const { evaluacion } = storeToRefs(useEvaluacion);
     const useDepartamento = useDepartamentosStore();
     const { obtenerDepartamentos } = useDepartamento;
     const { departamentos } = storeToRefs(useDepartamento);

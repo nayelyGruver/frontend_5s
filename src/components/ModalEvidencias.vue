@@ -104,7 +104,6 @@
                 label="Terminar captura de evidencias"
                 color="primary"
                 v-close-popup
-                @click="finalizarEvaluacion()"
               />
             </q-card-actions>
           </q-form>
@@ -173,13 +172,9 @@ export default {
         modelArchivo.value = null;
         evidenciaCargada.value = null;
         submitting.value = false;
-      }, 3000);
+      }, 4000);
     };
 
-    const finalizarEvaluacion = () => {
-      console.log("FINALIZANDO EVALUACION");
-      //TODO: CALCULAR PROMEDIO Y GUARDAR
-    };
 
     return {
       abrir,
@@ -187,7 +182,6 @@ export default {
       submitting,
       abrirModalEvidencias,
 
-      finalizarEvaluacion,
       evidenciaCargada,
       enviarEvidencia,
 

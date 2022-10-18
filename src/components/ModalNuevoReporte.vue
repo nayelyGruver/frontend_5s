@@ -10,7 +10,6 @@
         <q-form @submit.prevent="guardarReporte">
           <div class="q-my-md" style="max-width: 300px">
             <label>Sucursal</label>
-            <!-- TODO:AGREGAR CHECKBOX DE EMPRESA -->
             <q-select
               outlined
               :disable="disableSelectSucursal"
@@ -99,83 +98,79 @@
 import { useEmpresasStore } from "../stores/empresas.js";
 import { useReporteStore } from "../stores/reportes.js";
 import { useEvaluacionStore } from "../stores/evaluacion.js";
+import { useDepartamentosStore } from "../stores/departamentos";
+import { useUsuarioStore } from "../stores/usuarios"
 
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import ModalEvaluacion from "../components/ModalEvaluacion.vue";
-import { useDepartamentosStore } from "../stores/departamentos";
 
 export default {
   components: {
     ModalEvaluacion,
   },
   setup() {
+    const useUsuario = useUsuarioStore()
+    const { usuarioAutenticado } = ref(useUsuario)
+
     const useEmpresa = useEmpresasStore();
     const { obtenerEmpresas } = useEmpresa;
     const { empresas } = storeToRefs(useEmpresa);
 
     const useReportes = useReporteStore();
-    const { insertarReporte, insercionCriteriosEvaluacion } = useReportes;
+    const { insertarReporte } = useReportes;
     const { reporte } = storeToRefs(useReportes);
-    const submitting = ref(false);
-    const model = ref({ id_departamento: "", nombre: "" });
-    const abrirModalEvaluacionRef = ref(null);
 
     const useEvaluacion = useEvaluacionStore();
     const { obtenerEvaluacion } = useEvaluacion;
+
     const useDepartamento = useDepartamentosStore();
     const { obtenerDepartamentos } = useDepartamento;
     const { departamentos } = storeToRefs(useDepartamento);
 
+    const abrirModalEvaluacionRef = ref(null);
     const disableSelectSucursal = ref(true);
+    const submitting = ref(false);
+    const model = ref({ id_departamento: "", nombre: "" })
     const modelCheck = ref(false);
     const modelFecha = ref("2022/10/12");
     const modelEmpresa = ref({ id_empresa: 10, nombre: "GRUVER" });
 
     let reporteObj = reactive({
-      usuario: "nperez",
-      empresa: "GRUVER",
-      id_empresa: 10,
+      usuario: usuarioAutenticado?.usuario,
+      empresa: usuarioAutenticado?.idSucursal.nombreSucursal,
+      id_empresa: usuarioAutenticado?.idSucursal.idSucursal,
       fecha: modelFecha.value,
     });
 
     const guardarReporte = () => {
-      console.log("VALOR DE MODEL FECHA", modelFecha.value);
-      console.log("VALOR DEL MODEL EMPRESA ", modelEmpresa.value);
       reporteObj.empresa = modelEmpresa.value.nombre;
       reporteObj.id_empresa = modelEmpresa.value.id_empresa;
       reporteObj.fecha = modelFecha.value;
       submitting.value = true;
-      //Iserta el nuevo reporte y carga en el state reporte nuevo e Inserción masiva de evaluación de criterios
+
+      //Inserta el nuevo reporte y carga en el state reporte nuevo e Inserción masiva de evaluación de criterios
       reporte.value = insertarReporte(reporteObj);
 
       obtenerDepartamentos(reporteObj.id_empresa).then(() => {
         model.value = departamentos.value[0];
       });
+
       setTimeout(() => {
-        // abrirModal.value = false;
-        obtenerEvaluacion(
-          reporte.value.id_reporte,
-          model.value.id_departamento
-        );
+        obtenerEvaluacion( reporte.value.id_reporte, model.value.id_departamento );
         abrirModalEvaluacionRef.value.abrir(true);
         submitting.value = false;
       }, 2000);
     };
     const habilitarSelectSucursal = () => {
-      modelCheck.value
-        ? (disableSelectSucursal.value = false)
-        : (disableSelectSucursal.value = true);
+      modelCheck.value ? (disableSelectSucursal.value = false) : (disableSelectSucursal.value = true);
     };
 
     const abrirModal = ref(false);
-    const abrir = () => {
-      abrirModal.value = true;
-    };
 
-    onMounted(() => {
-      obtenerEmpresas();
-    });
+    const abrir = () => abrirModal.value = true;
+
+    onMounted(() =>  obtenerEmpresas());
 
     return {
       abrir,

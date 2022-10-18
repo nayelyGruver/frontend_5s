@@ -52,7 +52,7 @@ export const useReporteStore = defineStore("reportes", () => {
     const insercionCriteriosEvaluacion = async (reporteObj) => {
       try{
           const { data } = await api.post('/criterios', reporteObj)
-          listaPuntosCriterios.value = [...data] //<----------REVISAR ESTO, NO DEBO TRAERME TODA LALISTA, SOLO QUIERO EL CRITERIO CON SUS PUNTOS
+          listaPuntosCriterios.value = [...data]
           console.log("lista de puntos criterios", listaPuntosCriterios)
           return data
       } catch(error){

@@ -39,28 +39,10 @@
             :rows="filtrarEvaluacion(nombre)"
             hide-bottom
             :rows-per-page-options="[0]"
-            ><template v-slot:body-cell-cumple="props">
+            >
+            <template v-slot:body-cell-cumple="props">
               <q-td class="space-around justify-evenly aling-items-center">
-                <q-btn
-                  @click="puntuarNoCumple(props.row.id_evaluacion)"
-                  icon="close"
-                  round
-                  label=""
-                  :color="btnNegativeColor"
-                >
-                  <q-tooltip> - {{ props.row.puntos }}pts </q-tooltip>
-                </q-btn>
-                <q-btn
-                  @click="
-                    puntuarCumple(props.row.id_evaluacion, props.row.puntos)
-                  "
-                  icon="done"
-                  round
-                  label=""
-                  :color="btnPositiveColor"
-                >
-                  <q-tooltip> + {{ props.row.puntos }}pts </q-tooltip>
-                </q-btn>
+                <q-checkbox  v-model="props.row.estado" @click="puntuarCumple(props.row.id_evaluacion, props.row.puntos, props.row.estado)" />
               </q-td>
             </template>
             <template v-slot:body-cell-acciones="props">
@@ -73,6 +55,7 @@
                 >
                   <q-tooltip> Agregar Observación </q-tooltip>
                 </q-btn>
+
               </q-td>
             </template>
             <template v-slot:header>
@@ -111,7 +94,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { formatearFecha } from "../helpers/formatearFecha";
 import ModalObservaciones from "src/components/ModalObservaciones.vue";
@@ -130,7 +113,7 @@ export default {
     const useEvaluacion = useEvaluacionStore();
     const {
       obtenerEvaluacion,
-      puntuarNoCumpleCriterio,
+      puntuarCumpleCriterio,
       obtenerCriterioEvaluacion,
     } = useEvaluacion;
     const { evaluacion } = storeToRefs(useEvaluacion);
@@ -162,17 +145,14 @@ export default {
       abrirModalObservacionesRef.value.abrir(true);
     };
 
-    const puntuarNoCumple = (id_evaluacion) => {
-      puntuarNoCumpleCriterio({
-        id_evaluacion: id_evaluacion,
-        puntos: 0,
-      });
-    };
+    const puntuarCumple = (id_evaluacion, puntuacion, estado) => {
+      let puntos = 0
+      estado?puntos=puntuacion:
+      console.log("estadi:", estado, " puntos: ", puntuacion, " puntos obtenidos: ", puntos)
 
-    const puntuarCumple = (id_evaluacion, punto) => {
-      puntuarNoCumpleCriterio({
+      puntuarCumpleCriterio({
         id_evaluacion: id_evaluacion,
-        puntos: punto,
+        puntos,
       });
     };
 
@@ -241,13 +221,13 @@ export default {
       model,
       cumpleModel: ref(null),
       agregarObservaciones,
-      puntuarNoCumple,
       puntuarCumple,
       subirEvidencias,
       abrirModalObservacionesRef,
       abrirModalEvidenciasRef,
       botonTerminarEvaluacion,
       calcularCalificacion,
+      val: ref(true)
     };
   },
 };

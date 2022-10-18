@@ -48,14 +48,6 @@
               </q-btn>
 
               <q-btn
-                @click="confirmarEliminarReporte(props.row.id_reporte)"
-                flat
-                color="negative"
-                icon="delete"
-              >
-                <q-tooltip> Eliminar Reporte </q-tooltip>
-              </q-btn>
-              <q-btn
                 @click="abrirVistaEvaluacion(props.row.id_reporte)"
                 flat
                 color="primary"
@@ -63,12 +55,22 @@
               >
                 <q-tooltip> Modificar Reporte </q-tooltip>
               </q-btn>
+
+              <q-btn
+                @click="confirmarEliminarReporte(props.row.id_reporte)"
+                flat
+                color="negative"
+                icon="delete"
+              >
+                <q-tooltip> Eliminar Reporte </q-tooltip>
+              </q-btn>
+
             </q-td>
 
           </template>
         </q-table>
         <template>
-          <q-dialog v-model="confirm" persistent>
+          <q-dialog v-model="modelEliminar" persistent>
             <q-card>
               <q-card-section class="row items-center">
                 <q-avatar icon="help_outline" text-color="negative" />
@@ -110,7 +112,6 @@ import ModalEvaluacion from "../components/ModalEvaluacion.vue";
 import { useReporteStore } from "../stores/reportes";
 import { useDepartamentosStore } from "../stores/departamentos";
 import { useEvaluacionStore } from "../stores/evaluacion";
-import { useRouter } from "vue-router";
 
 export default {
   components: {
@@ -120,7 +121,6 @@ export default {
   },
 
   setup() {
-    const router = useRouter();
 
     const useReporte = useReporteStore();
     const { eliminarReporte, obtenerReporteId } = useReporte;
@@ -137,7 +137,7 @@ export default {
     const abrirModalRef = ref(null);
     const modalNuevoReporte = ref(null);
     const abrirModalEvaluacionRef = ref(null);
-    const confirm = ref(false);
+    const modelEliminar = ref(false);
 
     const verDetallesReportes = (id) => {
       obtenerReporteId(id);
@@ -153,7 +153,7 @@ export default {
 
     const confirmarEliminarReporte = (id) => {
       obtenerReporteId(id);
-      confirm.value = true;
+      modelEliminar.value = true;
     };
 
     const columns = [
@@ -209,7 +209,6 @@ export default {
         obtenerEvaluacion(id_reporte, departamentos.value[0]?.id_departamento);
         abrirModalEvaluacionRef.value.abrir(true);
       });
-      // router.replace({ name: "evaluacion" })
     }
 
     return {
@@ -221,7 +220,7 @@ export default {
       abrirModalRef,
       buscar: ref(""),
       confirmarEliminarReporte,
-      confirm,
+      modelEliminar,
       eliminarReporte,
       modalNuevoReporte,
       crearNuevoReporte,

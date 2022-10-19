@@ -104,6 +104,7 @@ import { useUsuarioStore } from "../stores/usuarios"
 import { ref, reactive, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import ModalEvaluacion from "../components/ModalEvaluacion.vue";
+import { formatearFecha2 } from "../helpers/formatearFecha"
 
 export default {
   components: {
@@ -111,7 +112,7 @@ export default {
   },
   setup() {
     const useUsuario = useUsuarioStore()
-    const { usuarioAutenticado } = ref(useUsuario)
+    const { usuarioAutenticado } = storeToRefs(useUsuario)
 
     const useEmpresa = useEmpresasStore();
     const { obtenerEmpresas } = useEmpresa;
@@ -133,13 +134,15 @@ export default {
     const submitting = ref(false);
     const model = ref({ id_departamento: "", nombre: "" })
     const modelCheck = ref(false);
-    const modelFecha = ref("2022/10/12");
-    const modelEmpresa = ref({ id_empresa: 10, nombre: "GRUVER" });
+    const modelFecha = ref(formatearFecha2(new Date()));
+    const empresaUsuario = ref(empresas.value.filter(empresa => empresa.id_empresa == usuarioAutenticado?.value.idSucursal.idSucursal)[0])
+
+    const modelEmpresa = ref({id_empresa: empresaUsuario.value.id_empresa , nombre:  empresaUsuario.value.nombre})
 
     let reporteObj = reactive({
-      usuario: usuarioAutenticado?.usuario,
-      empresa: usuarioAutenticado?.idSucursal.nombreSucursal,
-      id_empresa: usuarioAutenticado?.idSucursal.idSucursal,
+      usuario: usuarioAutenticado?.value.usuario,
+      empresa: usuarioAutenticado?.value.idSucursal.nombreSucursal,
+      id_empresa: usuarioAutenticado?.value.idSucursal.idSucursal,
       fecha: modelFecha.value,
     });
 

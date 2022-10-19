@@ -6,7 +6,7 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
   console.log("Generando Reporte")
 
   // HAY QUE SUBIR LA IMAGEN DEL LOGO AL SERVIDOR Y PONER LA URL DE LA IMAGEN AQUI
-  doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
+  // doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
 
   doc.autoTable({
     theme: 'plain',
@@ -83,7 +83,7 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
       doc.addPage("a4","p")
       doc.getFontSize(26)
       doc.text(90, 20,"Evidencias 5's");
-      doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
+      // doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
       doc.getFontSize(8)
       doc.text(20, 27,area);
       indexPosicion = 0

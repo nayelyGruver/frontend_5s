@@ -1,9 +1,10 @@
 <template>
   <div class="contenedor-login">
     <h1>Portal 5s</h1>
-    <form
+    <q-form
       class="bg-white contenedor formulario-login"
       @submit.prevent.stop="iniciarSesion"
+      ref="formulario"
     >
       <div class="q-pa-xl">
         <div class="contenedor-logo-gruver">
@@ -16,7 +17,7 @@
         <div class="q-mb-md">
           <q-input
             ref="usuarioRef"
-            v-model="usuario"
+            v-model="usuarioObj.usuario"
             label="Ingresa el nombre de usuario"
             :dense="dense"
             lazy-rules
@@ -34,7 +35,7 @@
         <div class="q-mb-md">
           <q-input
             ref="contrasenaRef"
-            v-model="contrasena"
+            v-model="usuarioObj.contrasena"
             filled
             :type="isPassword ? 'password' : 'text'"
             label="Ingresa la contraseña"
@@ -57,13 +58,13 @@
           <q-btn color="primary" type="submit" label="Iniciar Sesión" />
         </div>
       </div>
-    </form>
+    </q-form>
   </div>
 </template>
 <script>
 import { useUsuarioStore } from "../stores/usuarios";
 import { apiUsuarios } from "src/boot/axiosUsuarios";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { useQuasar } from "quasar";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
@@ -72,7 +73,7 @@ export default {
   setup() {
     const useUsuario = useUsuarioStore();
     // destructuración de las acciones
-    const { autenticarUsuario } = useUsuario;
+    const { login } = useUsuario;
     // destructuración de propiedades reactivas y computadas
     const { usuarioAutenticado } = storeToRefs(useUsuario);
 
@@ -82,10 +83,15 @@ export default {
     const contrasenaRef = ref("");
     const isPassword = ref(true);
     const dense = ref(false);
+    const formulario = ref(null);
 
     const $q = useQuasar();
     const router = useRouter();
 
+    const usuarioObj = reactive({
+      usuario: "",
+      contrasena: "",
+    });
     //metodos
     const mostrarNotificacion = (mensaje) => {
       $q.notify({
@@ -95,27 +101,14 @@ export default {
       });
     };
     const iniciarSesion = async () => {
-      usuarioRef.value.validate();
-      contrasenaRef.value.validate();
-
       try {
-        // Si esta vacio el formulario
-        if (!usuarioRef.value.validate() || !contrasenaRef.value.validate()) {
-          return;
+        if (await formulario.value.validate()) {
+          await login(usuarioObj);
+          router.push("/principal");
         }
-
-        const { data } = await apiUsuarios.post("/usuarios/login", {
-          usuario: usuario.value,
-          contrasena: contrasena.value,
-        });
-        console.log(data);
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("usuario", data);
-        usuarioAutenticado.value = data;
-        autenticarUsuario();
-        router.push("/principal");
       } catch (error) {
-        mostrarNotificacion(error.response.data.msg);
+        // mostrarNotificacion(error);
+        console.log(error);
       }
     };
 
@@ -125,7 +118,9 @@ export default {
     };
 
     return {
+      usuarioObj,
       usuario,
+      formulario,
       contrasena,
       usuarioRef,
       contrasenaRef,

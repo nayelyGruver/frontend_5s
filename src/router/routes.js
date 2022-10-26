@@ -8,6 +8,7 @@ const routes = [
   {
     path: '/principal',
     name: 'principal',
+    meta: { auth: true },
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', icono:'dashboard', label: 'Inicio', name: 'dashboard',component: () => import('src/modules/dashboard/DashBoard.vue') },

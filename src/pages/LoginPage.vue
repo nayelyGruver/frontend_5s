@@ -3,7 +3,7 @@
     <h1>Portal 5s</h1>
     <q-form
       class="bg-white contenedor formulario-login"
-      @submit.prevent.stop="iniciarSesion"
+      @submit.prevent.stop="login"
       ref="formulario"
     >
       <div class="q-pa-xl">
@@ -62,8 +62,8 @@
   </div>
 </template>
 <script>
-import { useUsuarioStore } from "../stores/usuarios";
-import { apiUsuarios } from "src/boot/axiosUsuarios";
+import { useAutenticacionStore } from "../stores/autenticaciones";
+
 import { ref, reactive } from "vue";
 import { useQuasar } from "quasar";
 import { storeToRefs } from "pinia";
@@ -71,11 +71,8 @@ import { useRouter } from "vue-router";
 
 export default {
   setup() {
-    const useUsuario = useUsuarioStore();
-    // destructuración de las acciones
-    const { login } = useUsuario;
-    // destructuración de propiedades reactivas y computadas
-    const { usuarioAutenticado } = storeToRefs(useUsuario);
+    const useAutenticacion = useAutenticacionStore();
+    const { iniciarSesion } = useAutenticacion;
 
     const usuario = ref("");
     const contrasena = ref("");
@@ -100,10 +97,10 @@ export default {
         color: "red",
       });
     };
-    const iniciarSesion = async () => {
+    const login = async () => {
       try {
         if (await formulario.value.validate()) {
-          await login(usuarioObj);
+          await iniciarSesion(usuarioObj);
           router.push("/principal");
         }
       } catch (error) {
@@ -124,9 +121,10 @@ export default {
       contrasena,
       usuarioRef,
       contrasenaRef,
+      iniciarSesion,
       isPassword,
       dense,
-      iniciarSesion,
+      login,
       getFechaActual,
     };
   },

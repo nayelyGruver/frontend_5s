@@ -45,7 +45,8 @@ import { storeToRefs } from "pinia";
 import NavBar from "../components/NavBar.vue";
 
 import { useReporteStore } from "../stores/reportes";
-import { useUsuarioStore } from "../stores/usuarios";
+// import { useUsuarioStore } from "../stores/usuarios";
+import { useAutenticacionStore } from "../stores/autenticaciones";
 import { useMetricasStore } from "../stores/metricas";
 import { useEmpresasStore } from "../stores/empresas";
 
@@ -56,7 +57,7 @@ export default {
   setup() {
     const useReporte = useReporteStore();
     const { obtenerReportes } = useReporte;
-    const useUsuario = useUsuarioStore();
+    const useUsuario = useAutenticacionStore();
     const { usuarioAutenticado } = storeToRefs(useUsuario);
     const { obtenerUsuarios } = useUsuario;
     const leftDrawerOpen = ref(false);

@@ -1,7 +1,7 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
-import { useUsuarioStore } from 'src/stores/usuarios'
+import { useAutenticacionStore } from 'src/stores/autenticaciones'
 import { storeToRefs } from 'pinia'
 
 /*
@@ -31,7 +31,7 @@ export default route(function (/* { store, ssrContext } */) {
   Router.beforeEach( async ( to, from, next ) => {
 
     const requiredMeta = to.meta?.auth
-    const useUsuario = useUsuarioStore()
+    const useUsuario = useAutenticacionStore()
     const { token } = storeToRefs(useUsuario)
     const { refrescarToken } = useUsuario
 

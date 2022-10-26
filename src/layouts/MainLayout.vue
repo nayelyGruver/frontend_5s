@@ -10,6 +10,7 @@
           </q-avatar>
           Evaluaciones 5s
         </q-toolbar-title>
+        <q-btn flat @click="logout"> Cerrar sesión</q-btn>
       </q-toolbar>
     </q-header>
 
@@ -37,7 +38,7 @@
 <script>
 import { ref, onMounted, computed } from "vue";
 import { storeToRefs } from "pinia";
-
+import { useRouter } from "vue-router";
 import NavBar from "../components/NavBar.vue";
 
 import { useReporteStore } from "../stores/reportes";
@@ -55,8 +56,10 @@ export default {
     const { obtenerReportes } = useReporte;
     const useUsuario = useAutenticacionStore();
     const { usuarioAutenticado } = storeToRefs(useUsuario);
+    const { cerrarSesion } = useUsuario;
     // const { obtenerUsuarios } = useUsuario;
     const leftDrawerOpen = ref(false);
+    const router = useRouter();
 
     const useMetricas = useMetricasStore();
     const { obtenerCalificacionMes, obtenerCalificacionAnio } = useMetricas;
@@ -78,10 +81,16 @@ export default {
         return nombreCompleto[0].charAt(0) + nombreCompleto[1].charAt(0);
       });
 
+    const logout = () => {
+      router.push("/");
+      cerrarSesion();
+    };
+
     return {
       leftDrawerOpen,
       usuarioAutenticado,
       inicialesUsuario,
+      logout,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },

@@ -99,20 +99,20 @@ import { useEmpresasStore } from "../stores/empresas.js";
 import { useReporteStore } from "../stores/reportes.js";
 import { useEvaluacionStore } from "../stores/evaluacion.js";
 import { useDepartamentosStore } from "../stores/departamentos";
-import { useUsuarioStore } from "../stores/usuarios"
+import { useAutenticacionStore } from "../stores/autenticaciones";
 
 import { ref, reactive, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import ModalEvaluacion from "../components/ModalEvaluacion.vue";
-import { formatearFecha2 } from "../helpers/formatearFecha"
+import { formatearFecha2 } from "../helpers/formatearFecha";
 
 export default {
   components: {
     ModalEvaluacion,
   },
   setup() {
-    const useUsuario = useUsuarioStore()
-    const { usuarioAutenticado } = storeToRefs(useUsuario)
+    const useUsuario = useAutenticacionStore();
+    const { usuarioAutenticado } = storeToRefs(useUsuario);
 
     const useEmpresa = useEmpresasStore();
     const { obtenerEmpresas } = useEmpresa;
@@ -132,17 +132,25 @@ export default {
     const abrirModalEvaluacionRef = ref(null);
     const disableSelectSucursal = ref(true);
     const submitting = ref(false);
-    const model = ref({ id_departamento: "", nombre: "" })
+    const model = ref({ id_departamento: "", nombre: "" });
     const modelCheck = ref(false);
     const modelFecha = ref(formatearFecha2(new Date()));
-    const empresaUsuario = ref(empresas.value.filter(empresa => empresa.id_empresa == usuarioAutenticado?.value.idSucursal.idSucursal)[0])
+    const empresaUsuario = ref(
+      empresas.value.filter(
+        (empresa) =>
+          empresa.id_empresa === Number(usuarioAutenticado.value.idSucursal)
+      )[0]
+    );
 
-    const modelEmpresa = ref({id_empresa: empresaUsuario.value.id_empresa , nombre:  empresaUsuario.value.nombre})
+    const modelEmpresa = ref({
+      id_empresa: empresaUsuario.value.id_empresa,
+      nombre: empresaUsuario.value.nombre,
+    });
 
     let reporteObj = reactive({
-      usuario: usuarioAutenticado?.value.usuario,
-      empresa: usuarioAutenticado?.value.idSucursal.nombreSucursal,
-      id_empresa: usuarioAutenticado?.value.idSucursal.idSucursal,
+      usuario: usuarioAutenticado?.value.usuarioPermiso,
+      empresa: usuarioAutenticado?.value.nombreSucursal,
+      id_empresa: usuarioAutenticado?.value.idSucursal,
       fecha: modelFecha.value,
     });
 
@@ -152,7 +160,7 @@ export default {
       reporteObj.fecha = modelFecha.value;
       submitting.value = true;
 
-      //Inserta el nuevo reporte y carga en el state reporte nuevo e Inserción masiva de evaluación de criterios
+      // Inserta el nuevo reporte y carga en el state reporte nuevo e Inserción masiva de evaluación de criterios
       reporte.value = insertarReporte(reporteObj);
 
       obtenerDepartamentos(reporteObj.id_empresa).then(() => {
@@ -160,20 +168,25 @@ export default {
       });
 
       setTimeout(() => {
-        obtenerEvaluacion( reporte.value.id_reporte, model.value.id_departamento );
+        obtenerEvaluacion(
+          reporte.value.id_reporte,
+          model.value.id_departamento
+        );
         abrirModalEvaluacionRef.value.abrir(true);
         submitting.value = false;
       }, 2000);
     };
     const habilitarSelectSucursal = () => {
-      modelCheck.value ? (disableSelectSucursal.value = false) : (disableSelectSucursal.value = true);
+      modelCheck.value
+        ? (disableSelectSucursal.value = false)
+        : (disableSelectSucursal.value = true);
     };
 
     const abrirModal = ref(false);
 
-    const abrir = () => abrirModal.value = true;
+    const abrir = () => (abrirModal.value = true);
 
-    onMounted(() =>  obtenerEmpresas());
+    onMounted(() => obtenerEmpresas());
 
     return {
       abrir,
@@ -182,6 +195,7 @@ export default {
       modelEmpresa,
       empresas,
       reporteObj,
+      usuarioAutenticado,
       guardarReporte,
       submitting,
       disableSelectSucursal,

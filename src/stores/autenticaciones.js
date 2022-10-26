@@ -22,7 +22,8 @@ export const useAutenticacionStore = defineStore("autenticaciones", () => {
       establecerTiempo()
       // return data
     } catch ( error ) {
-      notificacion('negative', error.response.data.msg)
+      // notificacion('negative', error.response.data.msg)
+      console.log(error)
     }
   }
 

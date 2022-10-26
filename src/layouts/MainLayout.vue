@@ -21,11 +21,7 @@
             class="absolute-bottom-right"
             style="border-top-left-radius: 5px"
           >
-            <!-- <q-avatar class="avatar">
-              <img src="../img/yo.png" />
-              {{ inicialesUsuario(usuarioAutenticado?.nombre) }}
-            </q-avatar> -->
-            {{ usuarioAutenticado?.nombre }}
+            {{ usuarioAutenticado?.nombrePermiso }}
             <span style="font-weight: bold"></span>
           </div>
         </q-img>
@@ -59,7 +55,7 @@ export default {
     const { obtenerReportes } = useReporte;
     const useUsuario = useAutenticacionStore();
     const { usuarioAutenticado } = storeToRefs(useUsuario);
-    const { obtenerUsuarios } = useUsuario;
+    // const { obtenerUsuarios } = useUsuario;
     const leftDrawerOpen = ref(false);
 
     const useMetricas = useMetricasStore();
@@ -69,7 +65,7 @@ export default {
     const { obtenerEmpresas } = useEmpresas;
 
     onMounted(() => {
-      obtenerUsuarios();
+      // obtenerUsuarios();
       obtenerEmpresas();
       obtenerCalificacionMes();
       obtenerCalificacionAnio();

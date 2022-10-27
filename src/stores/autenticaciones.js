@@ -70,15 +70,15 @@ export const useAutenticacionStore = defineStore("autenticaciones", () => {
       return
     }
 
-    const configuracion = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${ token.value }`,
+    // const configuracion = {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${ token.value }`,
         
-      },
-      // usuarioAutenticado: usuarioAutenticado.value
-    }
-    console.log(usuarioAutenticado.value)
+    //   },
+    //   // usuarioAutenticado: usuarioAutenticado.value
+    // }
+    // console.log(usuarioAutenticado.value)
 
     try {
       const { data } = await apiUsuarios.get('/usuarios/perfil', usuarioAutenticado)

@@ -143,8 +143,8 @@ export default {
     );
 
     const modelEmpresa = ref({
-      id_empresa: empresaUsuario.value.id_empresa,
-      nombre: empresaUsuario.value.nombre,
+      id_empresa: empresaUsuario.value?.id_empresa,
+      nombre: empresaUsuario.value?.nombre,
     });
 
     let reporteObj = reactive({
@@ -155,9 +155,9 @@ export default {
     });
 
     const guardarReporte = () => {
-      reporteObj.empresa = modelEmpresa.value.nombre;
-      reporteObj.id_empresa = modelEmpresa.value.id_empresa;
-      reporteObj.fecha = modelFecha.value;
+      reporteObj.empresa = modelEmpresa?.value.nombre;
+      reporteObj.id_empresa = modelEmpresa?.value.id_empresa;
+      reporteObj.fecha = modelFecha?.value;
       submitting.value = true;
 
       // Inserta el nuevo reporte y carga en el state reporte nuevo e Inserción masiva de evaluación de criterios

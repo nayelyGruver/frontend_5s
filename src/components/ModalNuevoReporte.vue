@@ -20,7 +20,7 @@
             >
               <template v-slot:selected>
                 <q-chip color="white" text-color="primary" class="q-ma-none">
-                  {{ modelEmpresa.nombre }}
+                  {{ modelEmpresa?.nombre }}
                 </q-chip>
               </template>
             </q-select>

@@ -7,7 +7,8 @@ import axios from 'axios'
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: 'https://backend.gruver.com.mx/api', withCredentials: true })
+const api = axios.create({ baseURL: 'https://backend.gruver.com.mx/api', 'Access-Control-Allow-Credentials':true
+})
 // const api = axios.create({ baseURL: 'http://localhost:4000/api' })
 
 export default boot(({ app }) => {

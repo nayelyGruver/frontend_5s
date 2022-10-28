@@ -18,7 +18,7 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
      {header: "",  dataKey: 'fecha' }],
   })
 
-  doc.autoTable({
+  doc?.autoTable({
     theme: 'plain',
     styles: { halign: 'center',  fontSize: 10  },
     margin : {top: 0, bottom: 0},
@@ -37,7 +37,7 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
   let numeroDeS = 1
 
   lista_s.forEach(s => {
-    doc.autoTable({
+    doc?.autoTable({
       theme: 'plain',
       styles: { halign: 'center',  fontSize: 10,},
       border : {top: 0, right: 0, bottom: 0, left: 0},
@@ -50,7 +50,7 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
 
     numeroDeS = numeroDeS + 1
 
-    doc.autoTable({
+    doc?.autoTable({
       styles: { fontSize: 9},
       border : {top: 0, right: 0, bottom: 0, left: 0},
       cellPadding: {top: 1, right: 1, bottom: 1, left: 1},

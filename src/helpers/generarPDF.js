@@ -41,6 +41,21 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
   //     { empresa: ``, departamento: ``, fecha: `Calificación final: ${calificacion}` }
   //   ],
   // })
+  autoTable(doc,{
+    theme: 'plain',
+    styles: { halign: 'center',  fontSize: 10  },
+    margin : {top: 0, bottom: 0},
+    border : {top: 0, right: 0, bottom: 0, left: 0},
+    cellPadding: {top: 1, right: 1, bottom: 1, left: 1},
+    columns :
+    [{header: "",  dataKey: 'empresa' },
+     {header: "",  dataKey: 'departamento' },
+     {header: "",  dataKey: 'fecha' }],
+    body: [
+      { empresa: `Empresa: ${empresa}`, departamento: `Departamento: ${departamento}`, fecha: `Fecha: ${fecha}` },
+      { empresa: ``, departamento: ``, fecha: `Calificación final: ${calificacion}` }
+    ],
+  })
 
   let numeroDeS = 1
 
@@ -55,8 +70,19 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
   //     ],
   //     columnStyles: { 0: {  fontSize: 10, fontStyle: 'bold'}}
   //   })
-
+  lista_s.forEach(s => {
+    autoTable(doc,{
+      theme: 'plain',
+      styles: { halign: 'center',  fontSize: 10,},
+      border : {top: 0, right: 0, bottom: 0, left: 0},
+      cellPadding: {top: 0, right: 0, bottom: 0, left: 0},
+      body: [
+        { nombre_s: ` ${numeroDeS}S.${s.nombre.toUpperCase() }`},
+      ],
+      columnStyles: { 0: {  fontSize: 10, fontStyle: 'bold'}}
+    })
     numeroDeS = numeroDeS + 1
+  
 
   //   doc?.autoTable({
   //     styles: { fontSize: 9},
@@ -77,6 +103,25 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
 
   //   )
   // });
+  autoTable(doc,{
+    styles: { fontSize: 9},
+    border : {top: 0, right: 0, bottom: 0, left: 0},
+    cellPadding: {top: 1, right: 1, bottom: 1, left: 1},
+    columnStyles: { 0: { halign: 'center' }, 2: { halign: 'center'}, 3: { halign: 'center'} },
+    theme: 'grid',
+    columns :
+    [
+    {header: 'CRITERIO', dataKey: 'criterio'},
+    {header: 'DESCRIPCION', dataKey: 'descripcion'},
+    {header: 'PUNTOS', dataKey: 'puntos'},
+    {header: 'CUMPLE', dataKey: 'puntos_obtenidos'},
+    {header: 'OBSERVACIONES', dataKey: 'observaciones'}
+    ],
+    body : evaluacion.filter((row) => row.nombre_s === s.nombre),
+  },
+
+  )
+});
 
   const areasEnBuenasCondiciones =  evidencias.filter(evidencia => evidencia.id_area === 1)
   const areasDeOportunidad =  evidencias.filter(evidencia => evidencia.id_area === 2)
@@ -129,7 +174,6 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
   doc.save(`evaluacion_5s_${empresa}_${departamento}_${fecha}.pdf`)
 
 }
-
 
 
 

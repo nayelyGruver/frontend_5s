@@ -1,5 +1,5 @@
 import  jsPDF  from "jspdf";
-import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 
 export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, evaluacion, evidencias) =>{
   const doc = new jsPDF();
@@ -9,7 +9,15 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
   // doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
   
   console.log(doc)
-  doc?.autoTable({
+  // doc?.autoTable({
+  //   theme: 'plain',
+  //   styles: { halign: 'center',  fontSize: 12 } ,
+  //   columns :
+  //   [{header: "",  dataKey: 'empresa' },
+  //    {header: "Evaluación 5'S",  dataKey: 'departamento' },
+  //    {header: "",  dataKey: 'fecha' }],
+  // })
+  autoTable(doc, {
     theme: 'plain',
     styles: { halign: 'center',  fontSize: 12 } ,
     columns :
@@ -18,57 +26,57 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
      {header: "",  dataKey: 'fecha' }],
   })
 
-  doc?.autoTable({
-    theme: 'plain',
-    styles: { halign: 'center',  fontSize: 10  },
-    margin : {top: 0, bottom: 0},
-    border : {top: 0, right: 0, bottom: 0, left: 0},
-    cellPadding: {top: 1, right: 1, bottom: 1, left: 1},
-    columns :
-    [{header: "",  dataKey: 'empresa' },
-     {header: "",  dataKey: 'departamento' },
-     {header: "",  dataKey: 'fecha' }],
-    body: [
-      { empresa: `Empresa: ${empresa}`, departamento: `Departamento: ${departamento}`, fecha: `Fecha: ${fecha}` },
-      { empresa: ``, departamento: ``, fecha: `Calificación final: ${calificacion}` }
-    ],
-  })
+  // doc?.autoTable({
+  //   theme: 'plain',
+  //   styles: { halign: 'center',  fontSize: 10  },
+  //   margin : {top: 0, bottom: 0},
+  //   border : {top: 0, right: 0, bottom: 0, left: 0},
+  //   cellPadding: {top: 1, right: 1, bottom: 1, left: 1},
+  //   columns :
+  //   [{header: "",  dataKey: 'empresa' },
+  //    {header: "",  dataKey: 'departamento' },
+  //    {header: "",  dataKey: 'fecha' }],
+  //   body: [
+  //     { empresa: `Empresa: ${empresa}`, departamento: `Departamento: ${departamento}`, fecha: `Fecha: ${fecha}` },
+  //     { empresa: ``, departamento: ``, fecha: `Calificación final: ${calificacion}` }
+  //   ],
+  // })
 
   let numeroDeS = 1
 
-  lista_s.forEach(s => {
-    doc?.autoTable({
-      theme: 'plain',
-      styles: { halign: 'center',  fontSize: 10,},
-      border : {top: 0, right: 0, bottom: 0, left: 0},
-      cellPadding: {top: 0, right: 0, bottom: 0, left: 0},
-      body: [
-        { nombre_s: ` ${numeroDeS}S.${s.nombre.toUpperCase() }`},
-      ],
-      columnStyles: { 0: {  fontSize: 10, fontStyle: 'bold'}}
-    })
+  // lista_s.forEach(s => {
+  //   doc?.autoTable({
+  //     theme: 'plain',
+  //     styles: { halign: 'center',  fontSize: 10,},
+  //     border : {top: 0, right: 0, bottom: 0, left: 0},
+  //     cellPadding: {top: 0, right: 0, bottom: 0, left: 0},
+  //     body: [
+  //       { nombre_s: ` ${numeroDeS}S.${s.nombre.toUpperCase() }`},
+  //     ],
+  //     columnStyles: { 0: {  fontSize: 10, fontStyle: 'bold'}}
+  //   })
 
     numeroDeS = numeroDeS + 1
 
-    doc?.autoTable({
-      styles: { fontSize: 9},
-      border : {top: 0, right: 0, bottom: 0, left: 0},
-      cellPadding: {top: 1, right: 1, bottom: 1, left: 1},
-      columnStyles: { 0: { halign: 'center' }, 2: { halign: 'center'}, 3: { halign: 'center'} },
-      theme: 'grid',
-      columns :
-      [
-      {header: 'CRITERIO', dataKey: 'criterio'},
-      {header: 'DESCRIPCION', dataKey: 'descripcion'},
-      {header: 'PUNTOS', dataKey: 'puntos'},
-      {header: 'CUMPLE', dataKey: 'puntos_obtenidos'},
-      {header: 'OBSERVACIONES', dataKey: 'observaciones'}
-      ],
-      body : evaluacion.filter((row) => row.nombre_s === s.nombre),
-    },
+  //   doc?.autoTable({
+  //     styles: { fontSize: 9},
+  //     border : {top: 0, right: 0, bottom: 0, left: 0},
+  //     cellPadding: {top: 1, right: 1, bottom: 1, left: 1},
+  //     columnStyles: { 0: { halign: 'center' }, 2: { halign: 'center'}, 3: { halign: 'center'} },
+  //     theme: 'grid',
+  //     columns :
+  //     [
+  //     {header: 'CRITERIO', dataKey: 'criterio'},
+  //     {header: 'DESCRIPCION', dataKey: 'descripcion'},
+  //     {header: 'PUNTOS', dataKey: 'puntos'},
+  //     {header: 'CUMPLE', dataKey: 'puntos_obtenidos'},
+  //     {header: 'OBSERVACIONES', dataKey: 'observaciones'}
+  //     ],
+  //     body : evaluacion.filter((row) => row.nombre_s === s.nombre),
+  //   },
 
-    )
-  });
+  //   )
+  // });
 
   const areasEnBuenasCondiciones =  evidencias.filter(evidencia => evidencia.id_area === 1)
   const areasDeOportunidad =  evidencias.filter(evidencia => evidencia.id_area === 2)

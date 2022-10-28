@@ -1,4 +1,4 @@
-import { jsPDF } from "jspdf";
+import  jsPDF  from "jspdf";
 import "jspdf-autotable";
 
 export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, evaluacion, evidencias) =>{
@@ -7,8 +7,9 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
 
   // HAY QUE SUBIR LA IMAGEN DEL LOGO AL SERVIDOR Y PONER LA URL DE LA IMAGEN AQUI
   // doc.addImage("https://backend.gruver.com.mx/img-1664300003221.png",'png', 160, 5, 25, 25,"logo5s", 'NONE', 0 )
-
-  doc.autoTable({
+  
+  console.log(doc)
+  doc?.autoTable({
     theme: 'plain',
     styles: { halign: 'center',  fontSize: 12 } ,
     columns :

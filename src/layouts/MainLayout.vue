@@ -57,7 +57,7 @@ export default {
     const useUsuario = useAutenticacionStore();
     const { usuarioAutenticado } = storeToRefs(useUsuario);
     const { cerrarSesion } = useUsuario;
-    // const { obtenerUsuarios } = useUsuario;
+    const { autenticarUsuario } = useUsuario;
     const leftDrawerOpen = ref(false);
     const router = useRouter();
 
@@ -73,6 +73,9 @@ export default {
       obtenerCalificacionMes();
       obtenerCalificacionAnio();
       obtenerReportes();
+      localStorage.getItem("empresaUsuario");
+
+      autenticarUsuario();
     });
 
     const inicialesUsuario = (nombre) =>

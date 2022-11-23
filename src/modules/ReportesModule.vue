@@ -64,9 +64,7 @@
               >
                 <q-tooltip> Eliminar Reporte </q-tooltip>
               </q-btn>
-
             </q-td>
-
           </template>
         </q-table>
         <template>
@@ -121,7 +119,6 @@ export default {
   },
 
   setup() {
-
     const useReporte = useReporteStore();
     const { eliminarReporte, obtenerReporteId } = useReporte;
     const { reportes, reporte } = storeToRefs(useReporte);
@@ -138,8 +135,6 @@ export default {
     const modalNuevoReporte = ref(null);
     const abrirModalEvaluacionRef = ref(null);
     const modelEliminar = ref(false);
-
-
 
     const verDetallesReportes = (id) => {
       obtenerReporteId(id);
@@ -205,13 +200,13 @@ export default {
     ];
 
     const abrirVistaEvaluacion = (id_reporte) => {
-      obtenerReporteId(id_reporte)
-      console.log(evaluacion)
+      obtenerReporteId(id_reporte);
+      console.log(evaluacion);
       obtenerDepartamentos(reporte.value.id_empresa).then(() => {
         obtenerEvaluacion(id_reporte, departamentos.value[0]?.id_departamento);
         abrirModalEvaluacionRef.value.abrir(true);
       });
-    }
+    };
 
     return {
       abrirVistaEvaluacion,

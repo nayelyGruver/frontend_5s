@@ -32,13 +32,11 @@ export default route(function (/* { store, ssrContext } */) {
 
     const requiredMeta = to.meta?.auth
     const useUsuario = useAutenticacionStore()
-    const { token } = storeToRefs(useUsuario)
-    const { refrescarToken } = useUsuario
-
+    const { usuarioAutenticado } = storeToRefs(useUsuario)
+    
     if ( requiredMeta ) {
-      //validar usuario o token
-      await refrescarToken()
-      if ( token ) {
+
+      if ( usuarioAutenticado ) {
         return next()
       }
       return next("/")

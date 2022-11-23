@@ -101,7 +101,7 @@ import { useEvaluacionStore } from "../stores/evaluacion.js";
 import { useDepartamentosStore } from "../stores/departamentos";
 import { useAutenticacionStore } from "../stores/autenticaciones";
 
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import ModalEvaluacion from "../components/ModalEvaluacion.vue";
 import { formatearFecha2 } from "../helpers/formatearFecha";
@@ -138,19 +138,23 @@ export default {
     const empresaUsuario = ref(
       empresas.value.filter(
         (empresa) =>
-          empresa.id_empresa === Number(usuarioAutenticado.value.idSucursal)
+          empresa.id_empresa === Number(usuarioAutenticado?.value?.idSucursal)
       )[0]
     );
-
     const modelEmpresa = ref({
-      id_empresa: empresaUsuario.value?.id_empresa,
-      nombre: empresaUsuario.value?.nombre,
+      id_empresa: empresaUsuario?.value?.id_empresa,
+      nombre: empresaUsuario?.value?.nombre,
     });
-
+    watch(modelEmpresa, (valorNuevo, viejoValor) => {
+      localStorage.setItem(
+        "empresaUsuario",
+        viejoValor.nombre || valorNuevo.nombre
+      );
+    });
     let reporteObj = reactive({
-      usuario: usuarioAutenticado?.value.usuarioPermiso,
-      empresa: usuarioAutenticado?.value.nombreSucursal,
-      id_empresa: usuarioAutenticado?.value.idSucursal,
+      usuario: usuarioAutenticado?.value?.usuarioPermiso,
+      empresa: usuarioAutenticado?.value?.nombreSucursal,
+      id_empresa: usuarioAutenticado?.value?.idSucursal,
       fecha: modelFecha.value,
     });
 
@@ -186,7 +190,9 @@ export default {
 
     const abrir = () => (abrirModal.value = true);
 
-    onMounted(() => obtenerEmpresas());
+    onMounted(() => {
+      obtenerEmpresas();
+    });
 
     return {
       abrir,

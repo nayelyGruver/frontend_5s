@@ -9,7 +9,7 @@
       <div class="q-pa-xl">
         <div class="contenedor-logo-gruver">
           <q-img
-            src="../img/logoGruver.png"
+            src="../img/LogoGruver.png"
             spinner-color="white"
             class="q-mb-xl imagen-gruver"
           />

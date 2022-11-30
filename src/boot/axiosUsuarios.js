@@ -7,7 +7,7 @@ import axios from 'axios'
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const apiUsuarios = axios.create({ baseURL: 'https://sistemas.gruver.com.mx/api' })
+const apiUsuarios = axios.create({ baseURL: 'https://sistemas.gruver.com.mx//sistemas/api' })
 // const apiUsuarios = axios.create({ baseURL: 'http://localhost:4001/api' })
 
 export default boot(({ app }) => {

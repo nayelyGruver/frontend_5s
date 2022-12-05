@@ -146,7 +146,7 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
   if(areasEnBuenasCondiciones.length > 0){
     nuevaPaginaEvidencias("Areas en Buenas Condiciones")
     areasEnBuenasCondiciones.forEach(evidencia => {
-      doc.addImage(evidencia?.path_foto,'jpg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
+      doc.addImage(evidencia?.path_foto,'jpeg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
       indexPosicion == 5 ? nuevaPaginaEvidencias("Areas en Buenas Condiciones"):
       indexPosicion < 5? indexPosicion++ : indexPosicion = 0
     })
@@ -155,7 +155,7 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
   if(areasDeOportunidad.length > 0){
     nuevaPaginaEvidencias("Areas de Oportunidad")
     areasDeOportunidad.forEach(evidencia => {
-      doc.addImage(evidencia?.path_foto,'jpg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
+      doc.addImage(evidencia?.path_foto,'jpeg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
       indexPosicion == 5 ? nuevaPaginaEvidencias("Areas de Oportunidad"):
       indexPosicion < 5? indexPosicion++ : indexPosicion = 0
     })
@@ -164,7 +164,7 @@ export const generarPDF = (empresa, departamento, fecha, calificacion, lista_s, 
   if(areasParaMantenimiento.length > 0){
     nuevaPaginaEvidencias("Areas para Mantenimiento")
     areasParaMantenimiento.forEach(evidencia => {
-      doc.addImage(evidencia?.path_foto,'jpg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
+      doc.addImage(evidencia?.path_foto,'jpeg', posiciones[indexPosicion].x , posiciones[indexPosicion].y, 70, 80, evidencia?.path_foto, 'NONE', 0 )
       indexPosicion == 5 ? nuevaPaginaEvidencias("Areas para Mantenimiento"):
       indexPosicion < 5? indexPosicion++ : indexPosicion = 0
     })

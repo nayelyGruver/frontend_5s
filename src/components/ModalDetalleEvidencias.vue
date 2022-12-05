@@ -12,7 +12,9 @@
         </q-card-section>
         <q-card-section>
           <q-form
-            @submit.prevent="enviarEvidencia(modelArchivo, modelDepartamento, modelArea)"
+            @submit.prevent="
+              enviarEvidencia(modelArchivo, modelDepartamento, modelArea)
+            "
           >
             <div class="">
               <q-select
@@ -22,7 +24,10 @@
                 option-label="nombre"
                 label="Departamento"
                 @update:model-value="
-                  cargarEvidencias(reporte.id_reporte, modelDepartamento.id_departamento)
+                  cargarEvidencias(
+                    reporte.id_reporte,
+                    modelDepartamento.id_departamento
+                  )
                 "
               >
                 <template v-slot:selected>
@@ -133,7 +138,7 @@ export default {
   setup() {
     const modelDepartamento = ref({});
     const modelArchivo = ref(null);
-    const modelArea = ref({ id_area: 1, nombre: "Area en buenas condiciones" })
+    const modelArea = ref({ id_area: 1, nombre: "Area en buenas condiciones" });
     const abrirModalDetalleEvidencias = ref(false);
 
     const useReporte = useReporteStore();
@@ -166,9 +171,11 @@ export default {
       modelArchivo,
       modelArea,
       cargarEvidencias,
-      buenas: [ { label: "Areas en buenas condiciones", icon: "done"}],
-      oportunidad: [{ label: "Areas de oportunidad", icon: "close"} ],
-      mantenimiento: [ { label: "Areas para mantenimiento", icon: "construction"} ],
+      buenas: [{ label: "Areas en buenas condiciones", icon: "done" }],
+      oportunidad: [{ label: "Areas de oportunidad", icon: "close" }],
+      mantenimiento: [
+        { label: "Areas para mantenimiento", icon: "construction" },
+      ],
     };
   },
 };

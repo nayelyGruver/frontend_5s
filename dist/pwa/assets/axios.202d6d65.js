@@ -1,0 +1,1 @@
+import{b as e,a as o}from"./index.17364aa1.js";const i=o.create({baseURL:"https://backend.gruver.com.mx/api"});var s=e(({app:a})=>{a.config.globalProperties.$axios=o,a.config.globalProperties.$api=i});export{i as api,s as default};

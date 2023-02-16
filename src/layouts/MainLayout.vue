@@ -16,13 +16,19 @@
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <!-- drawer content -->
-      <div class="row justify-center contenedor-menu">
+       <div class="row justify-center contenedor-menu">
         <q-img src="../img/banner.jpg" id="target-img-1" style="height: 100px">
           <div
             class="absolute-bottom-right"
             style="border-top-left-radius: 5px"
           >
-            {{ usuarioAutenticado?.nombrePermiso }}
+            <q-avatar class="avatar">
+              <!-- <img src="../img/yo.png" /> -->
+              {{ inicialesUsuarios || null }}
+              <!-- {{ usuarioAutenticado?.nombre }} -->
+              <span style="font-weight: bold"></span>
+            </q-avatar>
+            {{ usuarioAutenticado?.nombre }}
             <span style="font-weight: bold"></span>
           </div>
         </q-img>
@@ -78,11 +84,14 @@ export default {
       autenticarUsuario();
     });
 
-    const inicialesUsuario = (nombre) =>
-      computed(() => {
-        const nombreCompleto = nombre.split(" ");
-        return nombreCompleto[0].charAt(0) + nombreCompleto[1].charAt(0);
-      });
+    const inicialesUsuarios = computed(() => {
+      const nombreArray = usuarioAutenticado?.value?.nombre.split(" ");
+      if (!nombreArray) return;
+      const iniciales = `${nombreArray[0]?.charAt(0)}${nombreArray[1]?.charAt(
+        0
+      )}`;
+      return iniciales;
+    });
 
     const logout = () => {
       router.push("/");
@@ -92,7 +101,7 @@ export default {
     return {
       leftDrawerOpen,
       usuarioAutenticado,
-      inicialesUsuario,
+      inicialesUsuarios,
       logout,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;

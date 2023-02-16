@@ -170,11 +170,10 @@ export default {
       });
       setTimeout(() => {
         modelArchivo.value = null;
-        evidenciaCargada.value = null;
+        // evidenciaCargada.value = null;
         submitting.value = false;
       }, 4000);
     };
-
 
     return {
       abrir,

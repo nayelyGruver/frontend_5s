@@ -1,9 +1,8 @@
 import { route } from 'quasar/wrappers'
+import { storeToRefs } from 'pinia'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
-import { useAutenticacionStore } from 'src/stores/autenticaciones'
-import { storeToRefs } from 'pinia'
-
+import { useAutenticacionStore }  from '../stores/autenticaciones'
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -27,23 +26,24 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
-
+  // ruta protegida
   Router.beforeEach( async ( to, from, next ) => {
 
-    const requiredMeta = to.meta?.auth
-    const useUsuario = useAutenticacionStore()
-    const { usuarioAutenticado } = storeToRefs(useUsuario)
+    const requiredMeta = to.meta.auth
+    const useAutenticacion = useAutenticacionStore()
+    const { autenticarUsuario } = useAutenticacion
+    const { isLogin } = storeToRefs(useAutenticacion)
+    autenticarUsuario()
     
-    if ( requiredMeta ) {
-
-      if ( usuarioAutenticado ) {
-        return next()
+    if (requiredMeta) {
+      if (isLogin.value) {
+        next()
+      } else {
+        next('/')
       }
-      return next("/")
+    } else {
+      next()
     }
-    next()
-
   })
-
   return Router
 })

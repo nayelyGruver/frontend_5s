@@ -6,31 +6,34 @@ import { notificacion } from 'src/helpers/mensajes'
 export const useAutenticacionStore = defineStore("autenticaciones", () => {
 
   const usuarioAutenticado = ref(null)
-
+  const isLogin = ref(false)
 
   const iniciarSesion = async ( usuario ) => {
     try {
-
+      usuario.idPortal = 3
       const { data } = await apiUsuarios.post('/usuarios/login', usuario)
+      // autenticarUsuario()
+      isLogin.value = true
       localStorage.setItem( 'token', data.token )
       
     } catch ( error ) {
-      // notificacion('negative', error.response.data.msg)
-      console.log(error)
+      notificacion('negative', error.response.data.msg)
     }
   }
 
+  // reseteamos el store de la autenticacion
   const cerrarSesion = async () => {
     try {
-      await apiUsuarios.get('/usuarios/logout')
+      usuarioAutenticado.value = null
+      localStorage.removeItem('token')
+      isLogin.value = false
+
     } catch ( error ) {
       console.log( error )
     }
   }
 
-
   const autenticarUsuario = async () => {
-
     const token = localStorage.getItem('token')
 
     if (!token) {
@@ -41,18 +44,16 @@ export const useAutenticacionStore = defineStore("autenticaciones", () => {
     const configuracion = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${ token }`,
-        
-      },
-      // usuarioAutenticado: usuarioAutenticado.value
+        Authorization: `Bearer ${ token }`, 
+      }
     }
-
     try {
+      isLogin.value = true
+
       const { data } = await apiUsuarios.get('/usuarios/perfil', configuracion)
-      usuarioAutenticado.value =  { ...data } 
+      usuarioAutenticado.value = { ...data }
 
     } catch (error) {
-
       console.log(error.response.msg)
     }
 
@@ -62,7 +63,8 @@ export const useAutenticacionStore = defineStore("autenticaciones", () => {
     iniciarSesion,
     cerrarSesion,
     autenticarUsuario,
-    usuarioAutenticado
+    usuarioAutenticado,
+    isLogin
   }
 
 
